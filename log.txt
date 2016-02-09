@@ -1,0 +1,11 @@
+commit a540942c0dd0371d9b01e946851e66461bb4b687
+Author: Norrissim <zorinhand@mail.ru>
+Date:   Tue Feb 9 15:11:01 2016 +0300
+
+    Update status
+
+commit 49dee76f26688d8a33bb836652c17afd91b1e4e8
+Author: Norrissim <zorinhand@mail.ru>
+Date:   Tue Feb 9 15:02:28 2016 +0300
+
+    Add .gitignore

@@ -8,6 +8,10 @@ import javax.json.JsonWriter;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Everything is alright !");
+        System.out.println("1. Load message history from file");
+        System.out.println("2. Save massage history in file");
+        System.out.println("3. Add new massage");
+        System.out.println("4. Show the history");
+        System.out.println("5. Delete the message from the history");
     }
 }

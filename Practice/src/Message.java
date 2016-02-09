@@ -5,15 +5,15 @@ import java.sql.Time;
  */
 public class Message {
     private String id;
-    private String text;
     private String author;
-    private Time time;
+    private Time timestamp;
+    private String message;
 
-    public Message(String id, String text, String author, Time time) {
+    public Message(String id, String message, String author, Time timestamp) {
         this.id = id;
-        this.text = text;
+        this.message = message;
         this.author = author;
-        this.time = time;
+        this.timestamp = timestamp;
     }
 
     public String getId() {
@@ -24,12 +24,12 @@ public class Message {
         this.id = id;
     }
 
-    public String getText() {
-        return text;
+    public String getMessage() {
+        return message;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getAuthor() {
@@ -40,11 +40,21 @@ public class Message {
         this.author = author;
     }
 
-    public Time getTime() {
-        return time;
+    public Time getTimestamp() {
+        return timestamp;
     }
 
-    public void setTime(Time time) {
-        this.time = time;
+    public void setTimestamp(Time timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id='" + id + '\'' +
+                ", author='" + author + '\'' +
+                ", timestamp=" + timestamp +
+                ", message='" + message + '\'' +
+                '}';
     }
 }

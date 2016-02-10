@@ -1,16 +1,15 @@
 /**
  * Created by NotePad.by on 09.02.2016.
  */
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonWriter;
-import java.io.*;
+import javax.json.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Time;
 import java.util.ArrayList;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.sun.xml.internal.ws.api.ResourceLoader;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -28,11 +27,21 @@ public class Main {
             choose = optionReader.readLine();
             switch (choose) {
                 case "1": {
-                    System.out.println("1");
-                    Reader reader = new FileReader("history of messages.json");
-                    Gson gson = new GsonBuilder().create();
-                    Message p = gson.fromJson(reader,Message.class);
-                    System.out.println(p);
+                    String personJSONData = Files.readAllLines(Paths.get("history of messages.json")).toString();
+                    JsonReader reader = Json.createReader(new StringReader(personJSONData));
+                    JsonArray personArray = reader.readArray();
+                    JsonArray arr = personArray.getJsonArray(0);
+                    reader.close();
+
+                    for(int i = 0; i < arr.size(); i++) {
+                        JsonObject tempObj = arr.getJsonObject(i);
+                        Time tempTime = new Time(tempObj.getJsonNumber("timestamp").longValue());
+                        Message tempMes = new Message(tempObj.getString("id"), tempObj.getString("author"),
+                                tempTime , tempObj.getString("message"));
+                        history.add(tempMes);
+                        Time time = new Time(tempObj.getJsonNumber("timestamp").longValue());
+                    }
+                    System.out.println("history is loaded successfully");
                     break;
                 }
                 case "2": {
@@ -44,7 +53,9 @@ public class Main {
                     break;
                 }
                 case "4": {
-                    System.out.println("4");
+                    for(Message it : history) {
+                        System.out.println(it.toString());
+                    }
                     break;
                 }
                 case "5": {

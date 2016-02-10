@@ -50,11 +50,6 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Message{" +
-                "id='" + id + '\'' +
-                ", author='" + author + '\'' +
-                ", timestamp=" + timestamp +
-                ", message='" + message + '\'' +
-                '}';
+        return "id : " + id + " | " + timestamp + " | " + author + ": " + message;
     }
 }

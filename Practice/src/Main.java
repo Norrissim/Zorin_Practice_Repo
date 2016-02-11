@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -35,17 +36,6 @@ public class Main {
                         System.out.println("Your history is empty");
                         break;
                     }
-                    /*if(personArray.size() == 1)
-                    {
-                        JsonObject obj = personArray.getJsonObject(0);
-                        Time tempTime = new Time(obj.getJsonNumber("timestamp").longValue());
-                        Message tempMes = new Message(obj.getString("id"), obj.getString("author"),
-                                tempTime , obj.getString("message"));
-                        history.add(tempMes);
-                        loaded = true;
-                        System.out.println("history is loaded successfully");
-                        break;
-                    }*/
                     JsonArray arr = personArray.getJsonArray(0);
                     reader.close();
 
@@ -162,7 +152,32 @@ public class Main {
                             break;
                         }
                         case "4": {
-                            System.out.println("4");
+                            System.out.println("Enter start-time and end-time of period");
+                            System.out.println("Format: day, month, hour, minute ");
+                            Scanner sc = new Scanner(new InputStreamReader(System.in));
+                            Date start = new Date();
+                            Date end = new Date();
+                            boolean per = false;
+                            start.setDate(sc.nextInt());
+                            start.setMonth(sc.nextInt() - 1);
+                            start.setHours(sc.nextInt());
+                            start.setMinutes(sc.nextInt());
+                            start.setSeconds(0);
+                            end.setDate(sc.nextInt());
+                            end.setMonth(sc.nextInt() - 1);
+                            end.setHours(sc.nextInt());
+                            end.setMinutes(sc.nextInt());
+                            end.setSeconds(0);
+                            for(Message iter : history)
+                            {
+                                if(iter.getTimestamp().after(start) && iter.getTimestamp().before(end))
+                                {
+                                    System.out.println(iter.toString());
+                                    per = true;
+                                }
+                            }
+                            if(per == false)
+                                System.out.println("This period of time hasn't messages");
                             break;
                         }
                         default: {

@@ -15,14 +15,15 @@ public class Main {
         BufferedReader optionReader = new BufferedReader(new InputStreamReader(System.in));
         boolean loaded = false;
         String choose = "";
-        while (!choose.equals("6")) {
+        while (!choose.equals("7")) {
             System.out.println("Choose the option :");
             System.out.println("1. Load message history from file");
             System.out.println("2. Save massage history in file");
             System.out.println("3. Add new massage");
             System.out.println("4. Show the history");
             System.out.println("5. Delete the message from the history");
-            System.out.println("6. Exit");
+            System.out.println("6. Searching in the history");
+            System.out.println("7. Exit");
             choose = optionReader.readLine();
             switch (choose) {
                 case "1": {
@@ -127,7 +128,56 @@ public class Main {
                     break;
                 }
                 case "6": {
+                    System.out.println("1. by author");
+                    System.out.println("2. by key word");
+                    System.out.println("3. by regular expression");
+                    System.out.println("4. by time period");
+                    String choose1 = optionReader.readLine();
+                    switch (choose1) {
+                        case "1": {
+                            System.out.println("Enter author name");
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                            String name = reader.readLine();
+                            boolean find = false;
+                            for(Message it : history)
+                            {
+                                if(it.getAuthor().equals(name))
+                                {
+                                    System.out.println(it.toString());
+                                    find = true;
+                                }
+                            }
+                            if(find == false)
+                            {
+                                System.out.println("This author does not write messages");
+                            }
+                            break;
+                        }
+                        case "2": {
+                            System.out.println("2");
+                            break;
+                        }
+                        case "3": {
+                            System.out.println("3");
+                            break;
+                        }
+                        case "4": {
+                            System.out.println("4");
+                            break;
+                        }
+                        default: {
+                            System.out.println("Wrong choice!");
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case "7": {
                     System.out.println("program is completed successfully");
+                    break;
+                }
+                default: {
+                    System.out.println("Wrong choice!");
                     break;
                 }
             }

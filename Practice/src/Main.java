@@ -3,7 +3,6 @@
  */
 import javax.json.*;
 import java.io.*;
-import java.nio.Buffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Time;
@@ -30,16 +29,31 @@ public class Main {
                     String personJSONData = Files.readAllLines(Paths.get("history of messages.json")).toString();
                     JsonReader reader = Json.createReader(new StringReader(personJSONData));
                     JsonArray personArray = reader.readArray();
+                    if(personArray.size() == 0)
+                    {
+                        System.out.println("Your history is empty");
+                        break;
+                    }
+                    /*if(personArray.size() == 1)
+                    {
+                        JsonObject obj = personArray.getJsonObject(0);
+                        Time tempTime = new Time(obj.getJsonNumber("timestamp").longValue());
+                        Message tempMes = new Message(obj.getString("id"), obj.getString("author"),
+                                tempTime , obj.getString("message"));
+                        history.add(tempMes);
+                        loaded = true;
+                        System.out.println("history is loaded successfully");
+                        break;
+                    }*/
                     JsonArray arr = personArray.getJsonArray(0);
                     reader.close();
 
                     for(int i = 0; i < arr.size(); i++) {
                         JsonObject tempObj = arr.getJsonObject(i);
-                        Time tempTime = new Time(tempObj.getJsonNumber("timestamp").longValue());
+                        Date tempTime = new Date(tempObj.getJsonNumber("timestamp").longValue());
                         Message tempMes = new Message(tempObj.getString("id"), tempObj.getString("author"),
                                 tempTime , tempObj.getString("message"));
                         history.add(tempMes);
-                        Time time = new Time(tempObj.getJsonNumber("timestamp").longValue());
                     }
                     loaded = true;
                     System.out.println("history is loaded successfully");
@@ -79,13 +93,12 @@ public class Main {
                     String name = reader.readLine();
                     String mes = reader.readLine();
                     Date date = new Date();
-                    Time time = new Time(date.getTime());
-                    Message tempMessage = new Message(history.get(0).getId(), name, time, mes);
+                    Message tempMessage = new Message("don't work", name, date, mes);
                     history.add(tempMessage);
                     break;
                 }
                 case "4": {
-                    if(loaded == true) {
+                    if(history.size() > 0) {
                         for (Message it : history) {
                             System.out.println(it.toString());
                         }
@@ -93,12 +106,24 @@ public class Main {
                     }
                     else
                     {
-                        System.out.println("first you need to download message history");
+                        System.out.println("your history is empty");
                         break;
                     }
                 }
                 case "5": {
-                    System.out.println("5");
+                    System.out.println("Enter id for deleting :");
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                    String id = reader.readLine();
+                    boolean del = false;
+                    for(int i = 0; i < history.size(); i++) {
+                        if (history.get(i).getId().equals(id)) {
+                            history.remove(i);
+                            System.out.println("Message is deleted successfully");
+                            del = true;
+                        }
+                    }
+                    if(del == false)
+                    System.out.println("Message isn't found");
                     break;
                 }
                 case "6": {

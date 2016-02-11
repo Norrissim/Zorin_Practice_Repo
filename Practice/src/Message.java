@@ -1,4 +1,4 @@
-import java.sql.Time;
+import java.util.Date;
 
 /**
  * Created by NotePad.by on 09.02.2016.
@@ -6,10 +6,10 @@ import java.sql.Time;
 public class Message {
     private String id;
     private String author;
-    private Time timestamp;
+    private Date timestamp;
     private String message;
 
-    public Message(String id, String author, Time timestamp, String message) {
+    public Message(String id, String author, Date timestamp, String message) {
         this.id = id;
         this.message = message;
         this.author = author;
@@ -40,11 +40,11 @@ public class Message {
         this.author = author;
     }
 
-    public Time getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Time timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 

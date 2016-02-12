@@ -9,6 +9,8 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -166,11 +168,43 @@ public class Main {
                             break;
                         }
                         case "2": {
-                            System.out.println("2");
+                            System.out.println("Enter key word");
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                            String keyWord = reader.readLine();
+                            boolean find = false;
+                            for(Message it : history)
+                            {
+                                if(it.getMessage().contains(keyWord))
+                                {
+                                    System.out.println(it.toString());
+                                    find = true;
+                                }
+                            }
+                            if(find == false)
+                            {
+                                System.out.println("History hasn't messages with this word");
+                            }
                             break;
                         }
                         case "3": {
-                            System.out.println("3");
+                            System.out.println("Enter regular expression");
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                            String expression = reader.readLine();
+                            boolean find = false;
+                            for(Message it : history)
+                            {
+                                Pattern p = Pattern.compile(expression);
+                                Matcher m = p.matcher(it.getMessage());
+                                if(m.find())
+                                {
+                                    find = true;
+                                    System.out.println(it.toString());
+                                }
+                            }
+                            if(find == false)
+                            {
+                                System.out.println("History hasn't messages with this regular expression");
+                            }
                             break;
                         }
                         case "4": {

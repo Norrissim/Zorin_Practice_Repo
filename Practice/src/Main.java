@@ -42,7 +42,7 @@ public class Main {
                     for(int i = 0; i < arr.size(); i++) {
                         JsonObject tempObj = arr.getJsonObject(i);
                         Date tempTime = new Date(tempObj.getJsonNumber("timestamp").longValue());
-                        Message tempMes = new Message(tempObj.getString("id"), tempObj.getString("author"),
+                        Message tempMes = new Message(tempObj.getInt("id"), tempObj.getString("author"),
                                 tempTime , tempObj.getString("message"));
                         history.add(tempMes);
                     }
@@ -51,28 +51,41 @@ public class Main {
                     break;
                 }
                 case "2": {
-                    if(loaded == true) {
-                        JsonArray personArray = Json.createArrayBuilder().build();
-                        JsonObject personObject[] = new JsonObject[history.size()];
-                        for(int i = 0; i < history.size(); i++) {
-                             personObject[i]= Json.createObjectBuilder()
-                                    .add("id", history.get(i).getId())
-                                    .add("author", history.get(i).getAuthor())
-                                    .add("timestamp", history.get(i).getTimestamp().getTime())
-                                    .add("message", history.get(i).getMessage())
-                                    .build();
-                            personArray.add(personObject[i]);
-                        }
+                    if (!history.isEmpty()){
                         FileWriter fileWriter = new FileWriter("history of messages.json");
-                        JsonWriter writer = Json.createWriter(fileWriter);
-                        writer.writeArray(personArray);
-                        writer.close();
+                        JsonWriter jsonWriter = Json.createWriter(fileWriter);
+                        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+                        for (int i = 0;i<history.size();i++)
+                        {
+                            arrayBuilder.add(Json.createObjectBuilder().add("id",history.get(i).getId())
+                                    .add("author",history.get(i).getAuthor())
+                                    .add("timestamp",history.get(i).getTimestamp().getTime())
+                                    .add("message", history.get(i).getMessage()).build());
+                        }
+                        JsonArray jsonArray = arrayBuilder.build();
+                        jsonWriter.writeArray(jsonArray);
+                        jsonWriter.close();
                         System.out.println("history is saved successfully");
                         break;
                     }
-                    else
-                    {
-                        System.out.println("first you need to download message history");
+                    else {
+                        System.out.println("Your history is empty. Do you want to save it? (yes or no)");
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                        String answer = reader.readLine();
+                        switch (answer) {
+                            case "yes" :{
+                                FileWriter fileWriter = new FileWriter("history of messages.json");
+                                fileWriter.close();
+                            }
+                            case "no" :{
+                                break;
+                            }
+                            default:
+                            {
+                                System.out.println("Wrong choice!");
+                                break;
+                            }
+                        }
                         break;
                     }
                 }
@@ -83,8 +96,17 @@ public class Main {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                     String name = reader.readLine();
                     String mes = reader.readLine();
+                    int id;
+                    if(!history.isEmpty())
+                    {
+                        id = history.get(history.size() - 1).getId() + 1;
+                    }
+                    else
+                    {
+                        id = 0;
+                    }
                     Date date = new Date();
-                    Message tempMessage = new Message("don't work", name, date, mes);
+                    Message tempMessage = new Message(id, name, date, mes);
                     history.add(tempMessage);
                     break;
                 }
@@ -97,17 +119,17 @@ public class Main {
                     }
                     else
                     {
-                        System.out.println("your history is empty");
+                        System.out.println("Your history is empty");
                         break;
                     }
                 }
                 case "5": {
                     System.out.println("Enter id for deleting :");
                     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-                    String id = reader.readLine();
+                    int id = Integer.valueOf(reader.readLine());
                     boolean del = false;
                     for(int i = 0; i < history.size(); i++) {
-                        if (history.get(i).getId().equals(id)) {
+                        if (history.get(i).getId() == id) {
                             history.remove(i);
                             System.out.println("Message is deleted successfully");
                             del = true;

@@ -4,23 +4,23 @@ import java.util.Date;
  * Created by NotePad.by on 09.02.2016.
  */
 public class Message {
-    private String id;
+    private int id;
     private String author;
     private Date timestamp;
     private String message;
 
-    public Message(String id, String author, Date timestamp, String message) {
+    public Message(int id, String author, Date timestamp, String message) {
         this.id = id;
         this.message = message;
         this.author = author;
         this.timestamp = timestamp;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

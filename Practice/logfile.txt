@@ -1,3 +1,11 @@
+Load message history from file :
+Your history is empty 
+--------------------
+Save massage history in file :
+history is empty. Save it? :
+sa
+Wrong choice!
+--------------------
 Save massage history in file :
 history is empty. Save it? :
 no
@@ -6,4 +14,35 @@ Save massage history in file :
 history is empty. Save it? :
 yes
 history is saved successfully 
+--------------------
+Add new massage :
+Message is added.
+--------------------
+Show the history :
+1 messages are shown
+--------------------
+Add new massage :
+Message is added.
+--------------------
+Show the history :
+2 messages are shown
+--------------------
+Delete the message from the history :
+Message is deleted.
+--------------------
+Add new massage :
+Message is added.
+--------------------
+Show the history :
+2 messages are shown
+--------------------
+Save massage history in file :
+2 messages are saved
+history is saved successfully 
+--------------------
+Searching by author :
+1 messages are found
+--------------------
+Exit :
+program is completed successfully
 --------------------

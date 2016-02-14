@@ -163,6 +163,7 @@ public class Main {
                     }
                 }
                 case "5": {
+                    LogWorker.update(LOG_FILE_NAME, "Delete the message from the history :");
                     System.out.println("Enter id for deleting :");
                     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                     int id = Integer.valueOf(reader.readLine());
@@ -170,12 +171,17 @@ public class Main {
                     for(int i = 0; i < history.size(); i++) {
                         if (history.get(i).getId() == id) {
                             history.remove(i);
+                            LogWorker.update(LOG_FILE_NAME, "Message is deleted.");
+                            LogWorker.update(LOG_FILE_NAME, "--------------------");
                             System.out.println("Message is deleted successfully");
                             del = true;
                         }
                     }
-                    if(del == false)
-                    System.out.println("Message isn't found");
+                    if(del == false) {
+                        System.out.println("Message isn't found");
+                        LogWorker.update(LOG_FILE_NAME, "Message isn't found.");
+                        LogWorker.update(LOG_FILE_NAME, "--------------------");
+                    }
                     break;
                 }
                 case "6": {
@@ -186,6 +192,8 @@ public class Main {
                     String choose1 = optionReader.readLine();
                     switch (choose1) {
                         case "1": {
+                            LogWorker.update(LOG_FILE_NAME, "Searching by author :");
+                            int count = 0;
                             System.out.println("Enter author name");
                             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                             String name = reader.readLine();
@@ -194,10 +202,13 @@ public class Main {
                             {
                                 if(it.getAuthor().equals(name))
                                 {
+                                    count++;
                                     System.out.println(it.toString());
                                     find = true;
                                 }
                             }
+                            LogWorker.update(LOG_FILE_NAME, count + " messages are found");
+                            LogWorker.update(LOG_FILE_NAME, "--------------------");
                             if(find == false)
                             {
                                 System.out.println("This author does not write messages");
@@ -205,6 +216,8 @@ public class Main {
                             break;
                         }
                         case "2": {
+                            LogWorker.update(LOG_FILE_NAME, "Searching by key word :");
+                            int count = 0;
                             System.out.println("Enter key word");
                             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                             String keyWord = reader.readLine();
@@ -213,10 +226,13 @@ public class Main {
                             {
                                 if(it.getMessage().contains(keyWord))
                                 {
+                                    count++;
                                     System.out.println(it.toString());
                                     find = true;
                                 }
                             }
+                            LogWorker.update(LOG_FILE_NAME, count + " messages are found");
+                            LogWorker.update(LOG_FILE_NAME, "--------------------");
                             if(find == false)
                             {
                                 System.out.println("History hasn't messages with this word");
@@ -224,6 +240,8 @@ public class Main {
                             break;
                         }
                         case "3": {
+                            LogWorker.update(LOG_FILE_NAME, "Searching by regular expression :");
+                            int count = 0;
                             System.out.println("Enter regular expression");
                             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                             String expression = reader.readLine();
@@ -234,10 +252,13 @@ public class Main {
                                 Matcher m = p.matcher(it.getMessage());
                                 if(m.find())
                                 {
+                                    count++;
                                     find = true;
                                     System.out.println(it.toString());
                                 }
                             }
+                            LogWorker.update(LOG_FILE_NAME, count + " messages are found");
+                            LogWorker.update(LOG_FILE_NAME, "--------------------");
                             if(find == false)
                             {
                                 System.out.println("History hasn't messages with this regular expression");
@@ -245,6 +266,8 @@ public class Main {
                             break;
                         }
                         case "4": {
+                            LogWorker.update(LOG_FILE_NAME, "Searching by time period :");
+                            int count = 0;
                             System.out.println("Enter start-time of period in format: dd/mm/yyyy hh:mm:ss");
                             Scanner sc = new Scanner(new InputStreamReader(System.in));
                             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
@@ -266,20 +289,24 @@ public class Main {
                                 e.printStackTrace();
                             }
                             boolean per = false;
-
                             for(Message iter : history)
                             {
                                 if(iter.getTimestamp().after(startTime) && iter.getTimestamp().before(endTime))
                                 {
+                                    count++;
                                     System.out.println(iter.toString());
                                     per = true;
                                 }
                             }
+                            LogWorker.update(LOG_FILE_NAME, count + " messages are found");
+                            LogWorker.update(LOG_FILE_NAME, "--------------------");
                             if(per == false)
                                 System.out.println("This period of time hasn't messages");
                             break;
                         }
                         default: {
+                            LogWorker.update(LOG_FILE_NAME, "Wrong choice");
+                            LogWorker.update(LOG_FILE_NAME, "--------------------");
                             System.out.println("Wrong choice!");
                             break;
                         }
@@ -287,6 +314,9 @@ public class Main {
                     break;
                 }
                 case "7": {
+                    LogWorker.update(LOG_FILE_NAME, "Exit :");
+                    LogWorker.update(LOG_FILE_NAME, "program is completed successfully");
+                    LogWorker.update(LOG_FILE_NAME, "--------------------");
                     System.out.println("program is completed successfully");
                     break;
                 }

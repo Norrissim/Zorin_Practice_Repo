@@ -6,6 +6,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -14,6 +16,7 @@ import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        String LOG_FILE_NAME = "logfile.txt";
         ArrayList<Message> history = new ArrayList<Message>();
         BufferedReader optionReader = new BufferedReader(new InputStreamReader(System.in));
         boolean loaded = false;
@@ -30,13 +33,20 @@ public class Main {
             choose = optionReader.readLine();
             switch (choose) {
                 case "1": {
+                    LogWorker.update(LOG_FILE_NAME, "Load message history from file :");
                     String personJSONData = Files.readAllLines(Paths.get("history of messages.json")).toString();
                     JsonReader reader = Json.createReader(new StringReader(personJSONData));
                     JsonArray personArray = reader.readArray();
                     if(personArray.size() == 0)
                     {
+                        LogWorker.update(LOG_FILE_NAME, "Your history is empty \n");
+                        LogWorker.update(LOG_FILE_NAME, "--------------------");
                         System.out.println("Your history is empty");
                         break;
+                    }
+                    if(!history.isEmpty())
+                    {
+                        history.clear();
                     }
                     JsonArray arr = personArray.getJsonArray(0);
                     reader.close();
@@ -49,10 +59,14 @@ public class Main {
                         history.add(tempMes);
                     }
                     loaded = true;
+                    LogWorker.update(LOG_FILE_NAME, history.size() + " messages are loaded");
+                    LogWorker.update(LOG_FILE_NAME, "history is loaded successfully ");
+                    LogWorker.update(LOG_FILE_NAME, "--------------------");
                     System.out.println("history is loaded successfully");
                     break;
                 }
                 case "2": {
+                    LogWorker.update(LOG_FILE_NAME, "Save massage history in file :");
                     if (!history.isEmpty()){
                         FileWriter fileWriter = new FileWriter("history of messages.json");
                         JsonWriter jsonWriter = Json.createWriter(fileWriter);
@@ -67,23 +81,36 @@ public class Main {
                         JsonArray jsonArray = arrayBuilder.build();
                         jsonWriter.writeArray(jsonArray);
                         jsonWriter.close();
+                        LogWorker.update(LOG_FILE_NAME, history.size() + " messages are saved");
+                        LogWorker.update(LOG_FILE_NAME, "history is saved successfully ");
+                        LogWorker.update(LOG_FILE_NAME, "--------------------");
                         System.out.println("history is saved successfully");
                         break;
                     }
                     else {
+                        LogWorker.update(LOG_FILE_NAME, "history is empty. Save it? :");
                         System.out.println("Your history is empty. Do you want to save it? (yes or no)");
                         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                         String answer = reader.readLine();
+                        LogWorker.update(LOG_FILE_NAME, answer);
+
                         switch (answer) {
                             case "yes" :{
                                 FileWriter fileWriter = new FileWriter("history of messages.json");
                                 fileWriter.close();
+                                LogWorker.update(LOG_FILE_NAME, "history is saved successfully ");
+                                LogWorker.update(LOG_FILE_NAME, "--------------------");
+                                System.out.println("history is saved successfully");
+                                break;
                             }
                             case "no" :{
+                                LogWorker.update(LOG_FILE_NAME, "--------------------");
                                 break;
                             }
                             default:
                             {
+                                LogWorker.update(LOG_FILE_NAME, "Wrong choice!");
+                                LogWorker.update(LOG_FILE_NAME, "--------------------");
                                 System.out.println("Wrong choice!");
                                 break;
                             }
@@ -92,6 +119,7 @@ public class Main {
                     }
                 }
                 case "3": {
+                    LogWorker.update(LOG_FILE_NAME, "Add new massage :");
                     System.out.println("Write:");
                     System.out.println("1. Your name");
                     System.out.println("2. Your message");
@@ -110,10 +138,16 @@ public class Main {
                     Date date = new Date();
                     Message tempMessage = new Message(id, name, date, mes);
                     history.add(tempMessage);
+                    LogWorker.update(LOG_FILE_NAME, "Message is added.");
+                    LogWorker.update(LOG_FILE_NAME, "--------------------");
+                    System.out.println("Message is added.");
                     break;
                 }
                 case "4": {
+                    LogWorker.update(LOG_FILE_NAME, "Show the history :");
                     if(history.size() > 0) {
+                        LogWorker.update(LOG_FILE_NAME, history.size() +" messages are shown");
+                        LogWorker.update(LOG_FILE_NAME, "--------------------");
                         for (Message it : history) {
                             System.out.println(it.toString());
                         }
@@ -121,6 +155,9 @@ public class Main {
                     }
                     else
                     {
+                        LogWorker.update(LOG_FILE_NAME, "0 messages are shown");
+                        LogWorker.update(LOG_FILE_NAME, "history is empty.");
+                        LogWorker.update(LOG_FILE_NAME, "--------------------");
                         System.out.println("Your history is empty");
                         break;
                     }
@@ -208,25 +245,31 @@ public class Main {
                             break;
                         }
                         case "4": {
-                            System.out.println("Enter start-time and end-time of period");
-                            System.out.println("Format: day, month, hour, minute ");
+                            System.out.println("Enter start-time of period in format: dd/mm/yyyy hh:mm:ss");
                             Scanner sc = new Scanner(new InputStreamReader(System.in));
-                            Date start = new Date();
-                            Date end = new Date();
+                            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+                            Date startTime = null;
+                            Date endTime = null;
+                            try {
+                                startTime = format.parse(sc.nextLine());
+                            }
+                            catch (ParseException e)
+                            {
+                                e.printStackTrace();
+                            }
+                            System.out.println("Enter end-time of period in format: dd/mm/yyyy hh:mm:ss");
+                            try {
+                                endTime = format.parse(sc.nextLine());
+                            }
+                            catch (ParseException e)
+                            {
+                                e.printStackTrace();
+                            }
                             boolean per = false;
-                            start.setDate(sc.nextInt());
-                            start.setMonth(sc.nextInt() - 1);
-                            start.setHours(sc.nextInt());
-                            start.setMinutes(sc.nextInt());
-                            start.setSeconds(0);
-                            end.setDate(sc.nextInt());
-                            end.setMonth(sc.nextInt() - 1);
-                            end.setHours(sc.nextInt());
-                            end.setMinutes(sc.nextInt());
-                            end.setSeconds(0);
+
                             for(Message iter : history)
                             {
-                                if(iter.getTimestamp().after(start) && iter.getTimestamp().before(end))
+                                if(iter.getTimestamp().after(startTime) && iter.getTimestamp().before(endTime))
                                 {
                                     System.out.println(iter.toString());
                                     per = true;

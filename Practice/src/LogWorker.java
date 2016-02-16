@@ -1,13 +1,10 @@
 import java.io.*;
 
-/**
- * Created by NotePad.by on 14.02.2016.
- */
 public class LogWorker {
     private static void write(String fileName, String text) {
         File file = new File(fileName);
         try {
-            if(!file.exists()){
+            if (!file.exists()) {
                 file.createNewFile();
             }
             PrintWriter out = new PrintWriter(file.getAbsoluteFile());
@@ -16,7 +13,7 @@ public class LogWorker {
             } finally {
                 out.close();
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -26,7 +23,7 @@ public class LogWorker {
         StringBuilder strBuild = new StringBuilder();
         exists(fileName);
         try {
-            BufferedReader in = new BufferedReader(new FileReader( file.getAbsoluteFile()));
+            BufferedReader in = new BufferedReader(new FileReader(file.getAbsoluteFile()));
             try {
                 String s;
                 while ((s = in.readLine()) != null) {
@@ -36,7 +33,7 @@ public class LogWorker {
             } finally {
                 in.close();
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return strBuild.toString();
@@ -44,7 +41,7 @@ public class LogWorker {
 
     private static void exists(String fileName) throws FileNotFoundException {
         File file = new File(fileName);
-        if (!file.exists()){
+        if (!file.exists()) {
             throw new FileNotFoundException(file.getName());
         }
     }

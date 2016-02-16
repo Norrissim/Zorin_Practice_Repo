@@ -1,8 +1,5 @@
 import java.util.Date;
 
-/**
- * Created by NotePad.by on 09.02.2016.
- */
 public class Message {
     private int id;
     private String author;

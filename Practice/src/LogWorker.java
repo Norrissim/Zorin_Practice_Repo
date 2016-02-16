@@ -5,7 +5,7 @@ public class LogWorker {
         File file = new File(fileName);
         try {
             if (!file.exists()) {
-                file.createNewFile();
+                boolean newFile = file.createNewFile();
             }
             PrintWriter out = new PrintWriter(file.getAbsoluteFile());
             try {

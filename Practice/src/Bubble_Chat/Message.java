@@ -1,3 +1,5 @@
+package Bubble_Chat;
+
 import java.util.Date;
 
 public class Message {

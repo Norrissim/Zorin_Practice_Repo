@@ -1,18 +1,34 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Bubble Chat</title>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>B-b-bumble Chat</title>
+        <link rel="stylesheet" href="Chat_css.css">
+
     </head>
     <body>
-        <section>
-            <div>
-                Bumble Chat
-            </div>
-            <div>
-                <img src="icon1.png" alt="user icon" height="400px" width="650px">
-                <div>User name</div>
-                <input type="button" height="200px" width="200px">
-            </div>
+        <section class="titlePart">
+            <header>
+                B-b-bumble Chat
+            </header>
+                <div class="username">Username : </div>
+            <input disabled class="editname" type="text" placeholder="Input your username">
+            <button class="changeUsername" type="button">Change</button>
         </section>
+        <section class="centralPart">
+            <div class="messageAlly">Hello</div>
+            <div class="messageEnemy">User 1: Hi!</div>
+            <div class="messageAlly">How are you?</div>
+            <div class="messageEnemy">User 1: Good!</div>
+            <div class="messageEnemy">User 1: Do you want to go for a walk?</div>
+        </section>
+        <section class="writePart">
+            <textarea placeholder="Write your message and click Enter"></textarea>
+            <button class="enterMessage" type="button">Enter</button>
+            <button class="util" type="button">X</button>
+            <button class="util" type="button">I</button>
+            <img class="alarm" src="alarm.png" align="right" alt="Connection problems">
+        </section>
+        <footer>Zorin Nikolay Incorporated®, February 2016</footer>
     </body>
 </html>

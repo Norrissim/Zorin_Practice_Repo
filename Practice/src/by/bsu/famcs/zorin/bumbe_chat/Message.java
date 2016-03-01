@@ -1,4 +1,4 @@
-package Bubble_Chat;
+package by.bsu.famcs.zorin.bumbe_chat;
 
 import java.util.Date;
 

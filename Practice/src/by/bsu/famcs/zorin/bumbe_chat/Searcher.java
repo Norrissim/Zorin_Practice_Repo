@@ -1,4 +1,4 @@
-package Bubble_Chat;
+package by.bsu.famcs.zorin.bumbe_chat;
 
 import java.io.*;
 import java.text.ParseException;
@@ -45,18 +45,7 @@ public class Searcher {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            try {
-                LogWorker.update(fileName, "Exception: input issues");
-            } catch (FileNotFoundException e1) {
-                File newFile = new File(fileName);
-                try {
-                    newFile.createNewFile();
-                    LogWorker.update(fileName, "Exception: input issues");
-                    LogWorker.update(fileName, "--------------------");
-                } catch (IOException e3) {
-                    e3.printStackTrace();
-                }
-            }
+            LogWorker.update(fileName, "Exception: input issues");
         }
     }
 
@@ -95,29 +84,8 @@ public class Searcher {
 
         } catch (ParseException e) {
             System.out.println("Wrong format of data. Please, next time input data in right format.");
-            try {
-                LogWorker.update(fileName, "Exception: Wrong format of data");
-                LogWorker.update(fileName, "--------------------");
-            } catch (FileNotFoundException e1) {
-                File newFile = new File(fileName);
-                try {
-                    newFile.createNewFile();
-                    LogWorker.update(fileName, "Exception: Wrong format of data");
-                    LogWorker.update(fileName, "--------------------");
-                } catch (IOException e3) {
-                    e3.printStackTrace();
-                }
-            }
-        } catch (FileNotFoundException e) {
-            File newFile = new File(fileName);
-            try {
-                newFile.createNewFile();
-                System.out.println("Message can't be found, because wasn't found log file. Now this file is created. Please, try again");
-                LogWorker.update(fileName, "Message isn't found, because wasn't found log file.");
-                LogWorker.update(fileName, "--------------------");
-            } catch (IOException e3) {
-                e3.printStackTrace();
-            }
+            LogWorker.update(fileName, "Exception: Wrong format of data");
+            LogWorker.update(fileName, "--------------------");
         }
     }
 
@@ -145,42 +113,10 @@ public class Searcher {
             }
         } catch (PatternSyntaxException e) {
             System.out.println("Error: regular expression syntax error.");
-            try {
-                LogWorker.update(fileName, "Exception: regular expression syntax error");
-            } catch (FileNotFoundException e1) {
-                File newFile = new File(fileName);
-                try {
-                    newFile.createNewFile();
-                    LogWorker.update(fileName, "Exception: regular expression syntax error");
-                    LogWorker.update(fileName, "--------------------");
-                } catch (IOException e3) {
-                    e3.printStackTrace();
-                }
-            }
-        } catch (FileNotFoundException e) {
-            File newFile = new File(fileName);
-            try {
-                newFile.createNewFile();
-                System.out.println("Message can't be found, because wasn't found log file. Now this file is created. Please, try again");
-                LogWorker.update(fileName, "Message isn't found, because wasn't found log file.");
-                LogWorker.update(fileName, "--------------------");
-            } catch (IOException e3) {
-                e3.printStackTrace();
-            }
+            LogWorker.update(fileName, "Exception: regular expression syntax error");
         } catch (IOException e) {
             e.printStackTrace();
-            try {
-                LogWorker.update(fileName, "Exception: input issues");
-            } catch (FileNotFoundException e1) {
-                File newFile = new File(fileName);
-                try {
-                    newFile.createNewFile();
-                    LogWorker.update(fileName, "Exception: input issues");
-                    LogWorker.update(fileName, "--------------------");
-                } catch (IOException e3) {
-                    e3.printStackTrace();
-                }
-            }
+            LogWorker.update(fileName, "Exception: input issues");
         }
     }
 
@@ -204,30 +140,9 @@ public class Searcher {
             if (!find) {
                 System.out.println("History hasn't messages with this word");
             }
-        } catch (FileNotFoundException e) {
-            File newFile = new File(fileName);
-            try {
-                newFile.createNewFile();
-                System.out.println("Message can't be found, because wasn't found log file. Now this file is created. Please, try again");
-                LogWorker.update(fileName, "MEssage isn't found, because wasn't found log file.");
-                LogWorker.update(fileName, "--------------------");
-            } catch (IOException e3) {
-                e3.printStackTrace();
-            }
         } catch (IOException e) {
             e.printStackTrace();
-            try {
-                LogWorker.update(fileName, "Exception: input issues");
-            } catch (FileNotFoundException e1) {
-                File newFile = new File(fileName);
-                try {
-                    newFile.createNewFile();
-                    LogWorker.update(fileName, "Exception: input issues");
-                    LogWorker.update(fileName, "--------------------");
-                } catch (IOException e3) {
-                    e3.printStackTrace();
-                }
-            }
+            LogWorker.update(fileName, "Exception: input issues");
         }
     }
 
@@ -251,30 +166,9 @@ public class Searcher {
             if (!find) {
                 System.out.println("This author does not write messages");
             }
-        } catch (FileNotFoundException e) {
-            File newFile = new File(fileName);
-            try {
-                newFile.createNewFile();
-                System.out.println("Message can't be found, because wasn't found log file. Now this file is created. Please, try again");
-                LogWorker.update(fileName, "MEssage isn't found, because wasn't found log file.");
-                LogWorker.update(fileName, "--------------------");
-            } catch (IOException e3) {
-                e3.printStackTrace();
-            }
         } catch (IOException e) {
             e.printStackTrace();
-            try {
-                LogWorker.update(fileName, "Exception: input issues");
-            } catch (FileNotFoundException e1) {
-                File newFile = new File(fileName);
-                try {
-                    newFile.createNewFile();
-                    LogWorker.update(fileName, "Exception: input issues");
-                    LogWorker.update(fileName, "--------------------");
-                } catch (IOException e3) {
-                    e3.printStackTrace();
-                }
-            }
+            LogWorker.update(fileName, "Exception: input issues");
         }
     }
 }

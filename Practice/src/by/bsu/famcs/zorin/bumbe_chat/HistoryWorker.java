@@ -1,4 +1,4 @@
-package Bubble_Chat;
+package by.bsu.famcs.zorin.bumbe_chat;
 
 import javax.json.*;
 import java.io.*;
@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class HistoryWorker {
-    Searcher searcher;
-    final static String LOG_FILE_NAME = "logfile.txt";
-    ArrayList<Message> history;
+    private Searcher searcher;
+    private final static String LOG_FILE_NAME = "logfile.txt";
+    private ArrayList<Message> history;
 
     public HistoryWorker() {
         history = new ArrayList<>();
@@ -19,8 +19,9 @@ public class HistoryWorker {
     }
 
     public void startWhileMainMenu() {
+        BufferedReader optionReader = null;
         try {
-            BufferedReader optionReader = new BufferedReader(new InputStreamReader(System.in));
+            optionReader = new BufferedReader(new InputStreamReader(System.in));
             String choose = "";
             while (!choose.equals("7")) {
                 showMyMenu();
@@ -62,37 +63,23 @@ public class HistoryWorker {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            try {
                 LogWorker.update(LOG_FILE_NAME, "Exception: input problems");
-            } catch (FileNotFoundException e1) {
-                File newFile = new File(LOG_FILE_NAME);
+        } finally {
+            if (optionReader != null) {
                 try {
-                    newFile.createNewFile();
-                    LogWorker.update(LOG_FILE_NAME, "Exception: input/output problems");
-                } catch (IOException e3) {
-                    e3.printStackTrace();
+                    optionReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
     }
 
     public void finishProgram() {
-        try {
             LogWorker.update(LOG_FILE_NAME, "Exit :");
             LogWorker.update(LOG_FILE_NAME, "program is completed successfully");
             LogWorker.update(LOG_FILE_NAME, "--------------------");
             System.out.println("program is completed successfully");
-        } catch (FileNotFoundException e) {
-            File newFile = new File(LOG_FILE_NAME);
-            try {
-                newFile.createNewFile();
-                LogWorker.update(LOG_FILE_NAME, "Exit :");
-                LogWorker.update(LOG_FILE_NAME, "program is completed successfully");
-                LogWorker.update(LOG_FILE_NAME, "--------------------");
-            } catch (IOException e3) {
-                e3.printStackTrace();
-            }
-        }
     }
 
     public void deleteMessage(ArrayList<Message> history) {
@@ -116,58 +103,25 @@ public class HistoryWorker {
                 LogWorker.update(LOG_FILE_NAME, "--------------------");
                 System.out.println("Message isn't found");
             }
-        } catch (FileNotFoundException e) {
-            File newFile = new File(LOG_FILE_NAME);
-            try {
-                newFile.createNewFile();
-                System.out.println("Message can't be deleted, because wasn't found log file. Now this file is created. Please, try again");
-                LogWorker.update(LOG_FILE_NAME, "Message isn't deleted, because wasn't found log file.");
-                LogWorker.update(LOG_FILE_NAME, "--------------------");
-            } catch (IOException e3) {
-                e3.printStackTrace();
-            }
         } catch (IOException e) {
             e.printStackTrace();
-            try {
-                LogWorker.update(LOG_FILE_NAME, "Exception: input issues");
-            } catch (FileNotFoundException e1) {
-                File newFile = new File(LOG_FILE_NAME);
-                try {
-                    newFile.createNewFile();
-                    LogWorker.update(LOG_FILE_NAME, "Exception: input issues");
-                    LogWorker.update(LOG_FILE_NAME, "--------------------");
-                } catch (IOException e3) {
-                    e3.printStackTrace();
-                }
-            }
+            LogWorker.update(LOG_FILE_NAME, "Exception: input issues");
         }
     }
 
     public void showHistory(ArrayList<Message> history) {
-        try {
-            LogWorker.update(LOG_FILE_NAME, "Show the history :");
-            if (history.size() > 0) {
-                LogWorker.update(LOG_FILE_NAME, history.size() + " messages are shown");
-                LogWorker.update(LOG_FILE_NAME, "--------------------");
-                for (Message it : history) {
-                    System.out.println(it.toString());
-                }
-            } else {
-                LogWorker.update(LOG_FILE_NAME, "0 messages are shown");
-                LogWorker.update(LOG_FILE_NAME, "history is empty.");
-                LogWorker.update(LOG_FILE_NAME, "--------------------");
-                System.out.println("Your history is empty");
+        LogWorker.update(LOG_FILE_NAME, "Show the history :");
+        if (history.size() > 0) {
+            LogWorker.update(LOG_FILE_NAME, history.size() + " messages are shown");
+            LogWorker.update(LOG_FILE_NAME, "--------------------");
+            for (Message it : history) {
+                System.out.println(it.toString());
             }
-        } catch (FileNotFoundException e) {
-            File newFile = new File(LOG_FILE_NAME);
-            try {
-                newFile.createNewFile();
-                System.out.println("History can't be shown, because wasn't found log file. Now this file is created. Please, try again");
-                LogWorker.update(LOG_FILE_NAME, "History isn't shown, because wasn't found log file.");
-                LogWorker.update(LOG_FILE_NAME, "--------------------");
-            } catch (IOException e3) {
-                e3.printStackTrace();
-            }
+        } else {
+            LogWorker.update(LOG_FILE_NAME, "0 messages are shown");
+            LogWorker.update(LOG_FILE_NAME, "history is empty.");
+            LogWorker.update(LOG_FILE_NAME, "--------------------");
+            System.out.println("Your history is empty");
         }
     }
 
@@ -204,18 +158,7 @@ public class HistoryWorker {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            try {
-                LogWorker.update(LOG_FILE_NAME, "Exception: input issues");
-            } catch (FileNotFoundException e1) {
-                File newFile = new File(LOG_FILE_NAME);
-                try {
-                    newFile.createNewFile();
-                    LogWorker.update(LOG_FILE_NAME, "Exception: input issues");
-                    LogWorker.update(LOG_FILE_NAME, "--------------------");
-                } catch (IOException e3) {
-                    e3.printStackTrace();
-                }
-            }
+            LogWorker.update(LOG_FILE_NAME, "Exception: input issues");
         }
     }
 
@@ -279,18 +222,7 @@ public class HistoryWorker {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            try {
-                LogWorker.update(LOG_FILE_NAME, "Exception: input issues");
-            } catch (FileNotFoundException e1) {
-                File newFile = new File(LOG_FILE_NAME);
-                try {
-                    newFile.createNewFile();
-                    LogWorker.update(LOG_FILE_NAME, "Exception: input issues");
-                    LogWorker.update(LOG_FILE_NAME, "--------------------");
-                } catch (IOException e3) {
-                    e3.printStackTrace();
-                }
-            }
+            LogWorker.update(LOG_FILE_NAME, "Exception: input issues");
         }
     }
 
@@ -335,18 +267,7 @@ public class HistoryWorker {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            try {
-                LogWorker.update(LOG_FILE_NAME, "Exception: input issues");
-            } catch (FileNotFoundException e1) {
-                File newFile = new File(LOG_FILE_NAME);
-                try {
-                    newFile.createNewFile();
-                    LogWorker.update(LOG_FILE_NAME, "Exception: input issues");
-                    LogWorker.update(LOG_FILE_NAME, "--------------------");
-                } catch (IOException e3) {
-                    e3.printStackTrace();
-                }
-            }
+            LogWorker.update(LOG_FILE_NAME, "Exception: input issues");
         }
     }
 

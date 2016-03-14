@@ -45,56 +45,60 @@ function onChangeButtonClick(evtObj){
 
 
 function onUsernameChange(){
-    var username = document.getElementById('username');
-
+    var changeButton = document.getElementById("changeUsername");
+    var editChangeName = document.getElementsByClassName("editname")[0];
+    if(changeButton.innerText == "Ch-ch-change") {
+        editChangeName.disabled = false;
+        changeButton.innerText = "Save";
+    }
+    else {
+        changeButton.innerText = "Ch-ch-change";
+        editChangeName.disabled = true;
+    }
 }
 
 function onMessageEnter(){
-    var newMessage = document.getElementById('messageTextarea');
+    var newMessage = document.getElementById('messageArea');
+    var authorName = document.getElementsByClassName('editname')[0];
 
-    addMessage(newMessage.value);
+    addMessage(newMessage.value, authorName.value);
     newMessage.value = '';
     window.scrollTo(0, document.body.scrollHeight);
 
 }
 
-function addMessage(value) {
-    if(!value){
+function addMessage(value, author) {
+    if(!value || !author){
         return;
     }
-    var item = createItem(value);
+    var item = createItem(value, author);
     var items = document.getElementsByClassName('centralPart')[0];
 
     items.appendChild(item);
 }
 
-function createItem(text){
+function createItem(text, author){
     var divForMessage = document.createElement('div');
-    var pForMessage = document.createElement('p');
+    var buttonForDel = document.createElement('button');
+    var buttonForChange = document.createElement('button');
     var divForTime = document.createElement('div');
-    var divForButtons = document.createElement('div');
+    var divForAuthor = document.createElement('div');
     var divForText = document.createElement('div');
-    var deleteAnchor = document.createElement('a');
-    var changeAnchor = document.createElement('a');
-    var deleteImage = document.createElement('img');
-    var changeImage = document.createElement('img');
-    deleteImage.classList.add('deleteButton');
-    changeImage.classList.add('changeButton');
-    deleteImage.setAttribute('src','delete.png');
-    changeImage.setAttribute('src','pen1.png');
-    deleteAnchor.appendChild(deleteImage);
-    changeAnchor.appendChild(changeImage);
-    divForButtons.appendChild(deleteAnchor);
-    divForButtons.appendChild(changeAnchor);
     var d = new Date();
     var t= d.getTime();
-    divForTime.appendChild(document.createTextNode(d.toDateString()));
-    divForMessage.appendChild(pForMessage);
-    pForMessage.appendChild(divForTime);
-    pForMessage.appendChild(divForText);
+    buttonForDel.classList.add('utilDelete');
+    buttonForChange.classList.add('utilChange');
+    divForMessage.appendChild(buttonForDel);
+    buttonForDel.appendChild(document.createTextNode('X'));
+    divForMessage.appendChild(buttonForChange);
+    buttonForChange.appendChild(document.createTextNode('I'));
+    divForMessage.appendChild(divForTime);
+    divForTime.appendChild(document.createTextNode(d.toTimeString()));
+    divForMessage.appendChild(divForAuthor);
+    divForAuthor.appendChild(document.createTextNode(author + " :"));
+    divForMessage.appendChild(divForText);
     divForText.appendChild(document.createTextNode(text));
-    pForMessage.appendChild(divForButtons);
-    divForMessage.classList.add('yourMessage');
+    divForMessage.classList.add('messageAlly');
 
 
     return divForMessage;

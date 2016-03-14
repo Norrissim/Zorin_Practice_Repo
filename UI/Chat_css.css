@@ -73,7 +73,7 @@
         border: 4px solid midnightblue;
         font-size: 20px;
         vertical-align: middle;
-        background-color: aqua;
+        background-color: ivory;
         margin-right: auto;
         padding: 20px;
         max-width: 80%;
@@ -85,7 +85,7 @@
         border: 4px solid midnightblue;
         font-size: 20px;
         vertical-align: middle;
-        background-color: aqua;
+        background-color: ivory;
         margin-left: auto;
         padding: 20px;
         max-width: 80%;
@@ -147,6 +147,14 @@
         height: 30px;
         width: 30px;
         border-radius: 15px;
+
+    }
+
+    #changeUsername {
+
+    }
+
+    #messageArea {
 
     }
 }

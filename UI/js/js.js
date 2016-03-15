@@ -1,7 +1,7 @@
-function run(){
+var gloablTempSt;
+function run() {
     var usernameButton = document.getElementsByClassName('changeUsername')[0];
     var messageButton = document.getElementsByClassName('enterMessage')[0];
-
 
     usernameButton.addEventListener('click', onUsernameChange);
     messageButton.addEventListener('click', onMessageEnter);
@@ -9,45 +9,71 @@ function run(){
     var centerPart = document.getElementsByClassName('centralPart')[0];
     centerPart.addEventListener('click', onMassegeClick);
 
-    window.scrollTo(0, document.body.scrollHeight);
-
+    centerPart.scrollTop = centerPart.scrollHeight;
 }
 
 function onMassegeClick(evtObj) {
-    if(evtObj.type === 'click' && evtObj.target.classList.contains('utilDelete')){
+    if (evtObj.type === 'click' && evtObj.target.classList.contains('utilDelete')) {
         onDeleteButtonClick(evtObj);
     }
-    if(evtObj.type === 'click' && evtObj.target.classList.contains('utilChange')){
+    if (evtObj.type === 'click' && evtObj.target.classList.contains('utilChange')) {
         onChangeButtonClick(evtObj);
     }
 }
 
-function onDeleteButtonClick(evtObj){
+function onDontChangeButtonClick(evtObj) {
+
+    var buttonChangeMessage = evtObj.target.parentElement.firstElementChild.nextElementSibling;
+    var divForMessage = evtObj.target.parentElement;
+    buttonChangeMessage.innerText = "I";
+    var inputForNewMessage = divForMessage.lastElementChild.previousSibling;
+    var buttonDontSave = divForMessage.lastElementChild;
+    var divForText = document.createElement('div');
+    divForText.innerText = gloablTempSt;
+    divForMessage.removeChild(buttonDontSave);
+    divForMessage.removeChild(inputForNewMessage);
+    divForMessage.appendChild(divForText);
+}
+
+function onDeleteButtonClick(evtObj) {
     evtObj.target.parentElement.remove();
 }
 
-function onChangeButtonClick(evtObj){
-    var divForButtons = evtObj.target.parentElement.parentElement;
-    var divForMessage = divForButtons.parentElement.parentElement;
-    var pForMessage = divForButtons.parentElement;
-    var divForText = document.createElement('div');
-    var text = divForButtons.previousElementSibling;
-    var messageTextarea = document.getElementById('messageTextarea');
-    pForMessage.removeChild(text);
-    pForMessage.removeChild(divForButtons);
-    pForMessage.appendChild(divForText);
-    divForText.appendChild(document.createTextNode(messageTextarea.value));
-    pForMessage.appendChild(divForButtons);
-    divForMessage.classList.remove('yourMessage');
-    divForMessage.classList.add('yourMessageChanged');
+function onChangeButtonClick(evtObj) {
+    var buttonChangeMessage = evtObj.target;
+    var divForMessage = evtObj.target.parentElement;
+    if (buttonChangeMessage.innerText == "I") {
+        buttonChangeMessage.innerText = "K";
+        var buttonDontSave = document.createElement('button');
+        buttonDontSave.classList.add('utilDontSave');
+        buttonDontSave.appendChild(document.createTextNode("Don't save"));
+        var divForText = divForMessage.lastElementChild;
+        var tempMes = divForText.innerText;
+        gloablTempSt = divForText.innerText;
+        var inputForNewMessage = document.createElement('input');
+        inputForNewMessage.classList.add('editname');
+        inputForNewMessage.value = tempMes;
+        divForMessage.removeChild(divForText);
+        divForMessage.appendChild(inputForNewMessage);
+        divForMessage.appendChild(buttonDontSave);
+        buttonDontSave.addEventListener('click', onDontChangeButtonClick);
+    }
+    else {
+        buttonChangeMessage.innerText = "I";
+        var inputForNewMessage = divForMessage.lastElementChild;
+        var tempMes = inputForNewMessage.value;
+        var divForText = document.createElement('div');
+        divForText.innerText = tempMes;
+        divForMessage.removeChild(inputForNewMessage);
+        divForMessage.appendChild(divForText);
+    }
 }
 
 
-
-function onUsernameChange(){
+function onUsernameChange() {
     var changeButton = document.getElementById("changeUsername");
     var editChangeName = document.getElementsByClassName("editname")[0];
-    if(changeButton.innerText == "Ch-ch-change") {
+    if (changeButton.innerText == "Ch-ch-change") {
         editChangeName.disabled = false;
         changeButton.innerText = "Save";
     }
@@ -57,18 +83,18 @@ function onUsernameChange(){
     }
 }
 
-function onMessageEnter(){
+function onMessageEnter() {
     var newMessage = document.getElementById('messageArea');
     var authorName = document.getElementsByClassName('editname')[0];
+    var centerPart = document.getElementsByClassName('centralPart')[0];
 
     addMessage(newMessage.value, authorName.value);
     newMessage.value = '';
-    window.scrollTo(0, document.body.scrollHeight);
-
+    centerPart.scrollTop = centerPart.scrollHeight;
 }
 
 function addMessage(value, author) {
-    if(!value || !author){
+    if (!value || !author) {
         return;
     }
     var item = createItem(value, author);
@@ -77,7 +103,7 @@ function addMessage(value, author) {
     items.appendChild(item);
 }
 
-function createItem(text, author){
+function createItem(text, author) {
     var divForMessage = document.createElement('div');
     var buttonForDel = document.createElement('button');
     var buttonForChange = document.createElement('button');
@@ -85,7 +111,7 @@ function createItem(text, author){
     var divForAuthor = document.createElement('div');
     var divForText = document.createElement('div');
     var d = new Date();
-    var t= d.getTime();
+    var t = d.getTime();
     buttonForDel.classList.add('utilDelete');
     buttonForChange.classList.add('utilChange');
     divForMessage.appendChild(buttonForDel);

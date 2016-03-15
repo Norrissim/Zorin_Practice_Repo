@@ -44,6 +44,32 @@
         font-size: 20px;
     }
 
+    div.messageAllyChanged {
+        margin-top: 10px;
+        text-align: right;
+        border-radius: 20px;
+        border: 4px dotted forestgreen;
+        max-width: 80%;
+        font-size: 20px;
+        vertical-align: middle;
+        background-color: mediumspringgreen;
+        margin-left: auto;
+        padding: 20px;
+    }
+
+    div.messageEnemyChanged {
+        margin-top: 10px;
+        border-radius: 20px;
+        border: 4px dotted midnightblue;
+        font-size: 20px;
+        vertical-align: middle;
+        background-color: aqua;
+        margin-right: auto;
+        margin-top: 10px;
+        padding: 20px;
+        max-width: 80%;
+    }
+
     input.editname {
         border: solid;
         border-color: grey;
@@ -65,6 +91,7 @@
         border-left-width: 500px;
         border-right-width: 500px;
         border-color: lavender;
+        overflow-y: scroll;
     }
 
     div.messageEnemy {
@@ -138,6 +165,15 @@
         width: 30px;
         border-radius: 15px;
 
+    }
+
+    button.utilDontSave {
+        margin-top: 4px;
+        border-width: 2px;
+        vertical-align: top;
+        height: 20px;
+        width: 100px;
+        border-radius: 15px;
     }
 
     button.utilDelete {

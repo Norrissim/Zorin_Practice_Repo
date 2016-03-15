@@ -60,10 +60,12 @@ function onChangeButtonClick(evtObj) {
     }
     else {
         buttonChangeMessage.innerText = "I";
-        var inputForNewMessage = divForMessage.lastElementChild;
+        var inputForNewMessage = divForMessage.lastElementChild.previousElementSibling;
+        var buttonDontSave = divForMessage.lastElementChild;
         var tempMes = inputForNewMessage.value;
         var divForText = document.createElement('div');
         divForText.innerText = tempMes;
+        divForMessage.removeChild(buttonDontSave);
         divForMessage.removeChild(inputForNewMessage);
         divForMessage.appendChild(divForText);
     }

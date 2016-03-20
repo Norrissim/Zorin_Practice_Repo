@@ -3,3 +3,9 @@
 2016-03-19 18:30:45.757: [by.bsu.up.chat.Launcher] Get list of messages: GET http://192.168.56.1:999/chat?token={token}
 2016-03-19 18:30:45.757: [by.bsu.up.chat.Launcher] Send message: POST http://192.168.56.1:999/chat provide body json in format {"message" : "{message}"}
 2016-03-19 18:30:47.966: [by.bsu.up.chat.Launcher] Connection to server by address localhost:999
+2016-03-19 18:43:10.116: [by.bsu.up.chat.Launcher] Connection to server by address localhost:999
+2016-03-19 18:43:13.453: [by.bsu.up.chat.Launcher] Starting server on localhost...
+2016-03-19 18:43:13.509: [by.bsu.up.chat.Launcher] Server started.
+2016-03-19 18:43:13.518: [by.bsu.up.chat.Launcher] Get list of messages: GET http://192.168.56.1:999/chat?token={token}
+2016-03-19 18:43:13.519: [by.bsu.up.chat.Launcher] Send message: POST http://192.168.56.1:999/chat provide body json in format {"message" : "{message}"}
+2016-03-19 18:43:15.155: [by.bsu.up.chat.Launcher] Connection to server by address localhost:999

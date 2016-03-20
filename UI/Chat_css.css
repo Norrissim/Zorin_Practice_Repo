@@ -6,8 +6,8 @@
         margin-top: 0px;
         padding-top: 0px;
         display: block;
-        height: 110px;
-        width: 1885px;
+        height: 105px;
+        width: 1898px;
     }
 
     header {
@@ -193,6 +193,7 @@
     #messageArea {
 
     }
+
 }
 
 @media screen and (max-width: 1600px) and (max-height: 800px) {

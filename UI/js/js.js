@@ -49,19 +49,36 @@ function initMessageList() {
 
 function renderAllyMessage(messaage){
     var items = document.getElementsByClassName('centralPart')[0];
-    var element = elementFromTemplate();
+    if(messaage.deleted == false) {
+        var element = elementFromTemplate();
+        renderMessageValues(element, messaage);
+    }
+    else {
+        var element = elementDeletedFromTemplate();
+    }
+
     element.classList.add('messageAlly');
-    renderMessageValues(element, messaage);
 
     items.appendChild(element);
 }
 
 function renderEnemyMessage(messaage){
     var items = document.getElementsByClassName('centralPart')[0];
-    var element = elementFromTemplate();
-    element.classList.add('messageEnemy');
-    renderMessageValues(element, messaage);
+    if(messaage.deleted == false) {
+        var element = elementFromTemplate();
 
+        var btnDel = element.firstElementChild;
+        var btnCh = element.firstElementChild.nextElementSibling;
+        btnDel.style.display = "none";
+        btnCh.style.display = "none";
+
+        renderMessageValues(element, messaage);
+    }
+    else {
+        var element = elementDeletedFromTemplate();
+    }
+    
+    element.classList.add('messageEnemy');
     items.appendChild(element);
 }
 
@@ -76,6 +93,12 @@ function renderMessageValues(element, message) {
 
 function elementFromTemplate() {
     var template = document.getElementById("message-template");
+
+    return template.firstElementChild.cloneNode(true);
+}
+
+function  elementDeletedFromTemplate() {
+    var template = document.getElementById("message-deleted-template");
 
     return template.firstElementChild.cloneNode(true);
 }
@@ -139,6 +162,7 @@ function newMessage(text, author) {
         message:text,
         author: author,
         time: d,
+        deleted: false,
         id: '' + uniqueId()
     };
 }
@@ -168,7 +192,7 @@ function onDontChangeButtonClick(evtObj) {
 
 function onDeleteButtonClick(evtObj) {
     var index = indexByElement(evtObj.target, messageList);
-    messageList.splice(index, 1);
+    messageList[index].deleted = true;
     render(messageList);
     saveMessages(messageList);
 }

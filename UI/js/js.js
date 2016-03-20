@@ -77,7 +77,7 @@ function renderEnemyMessage(messaage){
     else {
         var element = elementDeletedFromTemplate();
     }
-    
+
     element.classList.add('messageEnemy');
     items.appendChild(element);
 }
@@ -231,6 +231,7 @@ function onChangeButtonClick(evtObj) {
 
 
 function onUsernameChange() {
+    var centerPart = document.getElementsByClassName('centralPart')[0];
     var changeButton = document.getElementById("changeUsername");
     var editChangeName = document.getElementsByClassName("editname")[0];
     if (changeButton.innerText == "Ch-ch-change") {
@@ -238,9 +239,11 @@ function onUsernameChange() {
         changeButton.innerText = "Save";
     }
     else {
+
         changeButton.innerText = "Ch-ch-change";
         globalCurrentUsername = editChangeName.value;
         editChangeName.disabled = true;
+        centerPart.scrollTop = centerPart.scrollHeight;
         saveUsernameInLocalStorage();
         render(messageList);
     }
@@ -279,31 +282,4 @@ function indexByElement(element, messages){
     return messages.findIndex(function(item) {
         return item.id == id;
     });
-}
-
-function createItem(text, author) {
-    var divForMessage = document.createElement('div');
-    var buttonForDel = document.createElement('button');
-    var buttonForChange = document.createElement('button');
-    var divForTime = document.createElement('div');
-    var divForAuthor = document.createElement('div');
-    var divForText = document.createElement('div');
-    var d = new Date();
-    var t = d.getTime();
-    buttonForDel.classList.add('utilDelete');
-    buttonForChange.classList.add('utilChange');
-    divForMessage.appendChild(buttonForDel);
-    buttonForDel.appendChild(document.createTextNode('X'));
-    divForMessage.appendChild(buttonForChange);
-    buttonForChange.appendChild(document.createTextNode('I'));
-    divForMessage.appendChild(divForTime);
-    divForTime.appendChild(document.createTextNode(d.toTimeString()));
-    divForMessage.appendChild(divForAuthor);
-    divForAuthor.appendChild(document.createTextNode(author + " :"));
-    divForMessage.appendChild(divForText);
-    divForText.appendChild(document.createTextNode(text));
-    divForMessage.classList.add('messageAlly');
-
-
-    return divForMessage;
 }

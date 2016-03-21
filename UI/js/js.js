@@ -1,4 +1,4 @@
-var globalTempSt;
+var globalCurrentMessage;
 var globalCurrentUsername;
 var messageList = [];
 
@@ -25,11 +25,11 @@ function run() {
 function render(messages) {
     var items = document.getElementsByClassName('centralPart')[0];
     var children = items.children;
-    while(children.length > 0) {
+    while (children.length > 0) {
         items.removeChild(children[0]);
     }
-    for(var i = 0; i < messages.length; i++) {
-        if(messages[i].author == globalCurrentUsername) {
+    for (var i = 0; i < messages.length; i++) {
+        if (messages[i].author == globalCurrentUsername) {
             renderAllyMessage(messages[i]);
         }
         else {
@@ -40,42 +40,63 @@ function render(messages) {
 
 function initMessageList() {
     messageList = loadMessages();
-    if(messageList == null) {
+    if (messageList == null) {
         messageList = [];
         saveMessages(messageList);
         messageList = loadMessages();
     }
 }
 
-function renderAllyMessage(messaage){
+function renderAllyMessage(messaage) {
+    var element;
     var items = document.getElementsByClassName('centralPart')[0];
-    if(messaage.deleted == false) {
-        var element = elementFromTemplate();
+    if (messaage.deleted == true) {
+        element = elementDeletedFromTemplate();
+    }
+    else if (messaage.changing == true) {
+        element = elementChangingFromTemplate();
         renderMessageValues(element, messaage);
     }
+
+    else if (messaage.changed == true) {
+        element = elementFromTemplate();
+        renderMessageValues(element, messaage);
+    }
+
     else {
-        var element = elementDeletedFromTemplate();
+        element = elementFromTemplate();
+        renderMessageValues(element, messaage);
     }
 
     element.classList.add('messageAlly');
-
     items.appendChild(element);
 }
 
-function renderEnemyMessage(messaage){
+function renderEnemyMessage(messaage) {
+    var element;
     var items = document.getElementsByClassName('centralPart')[0];
-    if(messaage.deleted == false) {
-        var element = elementFromTemplate();
-
-        var btnDel = element.firstElementChild;
-        var btnCh = element.firstElementChild.nextElementSibling;
-        btnDel.style.display = "none";
-        btnCh.style.display = "none";
-
+    if (messaage.deleted == true) {
+        element = elementDeletedFromTemplate();
+    }
+    else if (messaage.changing == true) {
+        element = elementChangingFromTemplate();
+        element.firstElementChild.style.display = "none";
+        element.firstElementChild.nextElementSibling.style.display = "none";
         renderMessageValues(element, messaage);
     }
+
+    else if (messaage.changed == true) {
+        element = elementFromTemplate();
+        element.firstElementChild.style.display = "none";
+        element.firstElementChild.nextElementSibling.style.display = "none";
+        renderMessageValues(element, messaage);
+    }
+
     else {
-        var element = elementDeletedFromTemplate();
+        element = elementFromTemplate();
+        element.firstElementChild.style.display = "none";
+        element.firstElementChild.nextElementSibling.style.display = "none";
+        renderMessageValues(element, messaage);
     }
 
     element.classList.add('messageEnemy');
@@ -86,25 +107,46 @@ function renderMessageValues(element, message) {
     element.setAttribute('data-mes-id', message.id);
     var d = new Date(message.time);
     var validDate = d.toLocaleDateString() + " " + d.toLocaleTimeString();
-    element.firstElementChild.nextElementSibling.nextElementSibling.textContent = validDate;
     element.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.textContent = message.author + " :";
-    element.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.textContent = message.message;
+    if (message.changed == true) {
+        element.firstElementChild.nextElementSibling.nextElementSibling.textContent = validDate + " (Changed)";
+        element.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.
+            nextElementSibling.textContent = message.message;
+    }
+    if(message.changing == true) {
+        element.firstElementChild.nextElementSibling.nextElementSibling.textContent = validDate;
+        element.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.
+            nextElementSibling.setAttribute('value', message.message);
+    }
+    if(message.changing == true && message.changed == true) {
+        element.firstElementChild.nextElementSibling.nextElementSibling.textContent = validDate + " (Changed)";
+        element.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.
+        nextElementSibling.setAttribute('value', message.message);
+    }
+    if(message.changing == false && message.changed == false) {
+        element.firstElementChild.nextElementSibling.nextElementSibling.textContent = validDate;
+        element.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.
+            nextElementSibling.textContent = message.message;
+    }
 }
 
 function elementFromTemplate() {
     var template = document.getElementById("message-template");
-
     return template.firstElementChild.cloneNode(true);
 }
 
-function  elementDeletedFromTemplate() {
+function elementDeletedFromTemplate() {
     var template = document.getElementById("message-deleted-template");
+    return template.firstElementChild.cloneNode(true);
+}
 
+function elementChangingFromTemplate() {
+    var template = document.getElementById("message-changing-template");
     return template.firstElementChild.cloneNode(true);
 }
 
 function saveUsernameInLocalStorage() {
-    if(typeof(Storage) == "undefined") {
+    if (typeof(Storage) == "undefined") {
         alert('localStorage is not accessible');
         return;
     }
@@ -113,7 +155,7 @@ function saveUsernameInLocalStorage() {
 }
 
 function loadUsernameFromLocalStorage() {
-    if(typeof(Storage) == "undefined") {
+    if (typeof(Storage) == "undefined") {
         alert('localStorage is not accessible');
         return;
     }
@@ -123,8 +165,28 @@ function loadUsernameFromLocalStorage() {
     return item && JSON.parse(item);
 }
 
+function saveCurrentMessageInLocalStorage() {
+    if (typeof(Storage) == "undefined") {
+        alert('localStorage is not accessible');
+        return;
+    }
+
+    localStorage.setItem("CurrentMessage", JSON.stringify(globalCurrentMessage));
+}
+
+function loadCurrentMessageFromLocalStorage() {
+    if (typeof(Storage) == "undefined") {
+        alert('localStorage is not accessible');
+        return;
+    }
+
+    var item = localStorage.getItem("CurrentMessage");
+
+    return item && JSON.parse(item);
+}
+
 function saveMessages(listToSave) {
-    if(typeof(Storage) == "undefined") {
+    if (typeof(Storage) == "undefined") {
         alert('localStorage is not accessible');
         return;
     }
@@ -133,15 +195,14 @@ function saveMessages(listToSave) {
 }
 
 function loadMessages() {
-    if(typeof(Storage) == "undefined") {
+    if (typeof(Storage) == "undefined") {
         alert('localStorage is not accessible');
         return;
     }
 
     var item = localStorage.getItem("MessagesList");
 
-    if(item == 'undefined')
-    {
+    if (item == 'undefined') {
         return null;
     }
 
@@ -159,10 +220,12 @@ function newMessage(text, author) {
     var d = new Date();
     var t = d.getTime();
     return {
-        message:text,
+        message: text,
         author: author,
         time: d,
         deleted: false,
+        changed: false,
+        changing: false,
         id: '' + uniqueId()
     };
 }
@@ -174,20 +237,18 @@ function onMassageClick(evtObj) {
     if (evtObj.type === 'click' && evtObj.target.classList.contains('utilChange')) {
         onChangeButtonClick(evtObj);
     }
+    if (evtObj.type === 'click' && evtObj.target.classList.contains('utilDontSave')) {
+        onDontChangeButtonClick(evtObj);
+    }
 }
 
 function onDontChangeButtonClick(evtObj) {
 
-    var buttonChangeMessage = evtObj.target.parentElement.firstElementChild.nextElementSibling;
-    var divForMessage = evtObj.target.parentElement;
-    buttonChangeMessage.innerText = "I";
-    var inputForNewMessage = divForMessage.lastElementChild.previousSibling;
-    var buttonDontSave = divForMessage.lastElementChild;
-    var divForText = document.createElement('div');
-    divForText.innerText = globalTempSt;
-    divForMessage.removeChild(buttonDontSave);
-    divForMessage.removeChild(inputForNewMessage);
-    divForMessage.appendChild(divForText);
+    var index = indexByElement(evtObj.target, messageList);
+    messageList[index].changing = false;
+    messageList[index].message = loadCurrentMessageFromLocalStorage();
+    render(messageList);
+    saveMessages(messageList);
 }
 
 function onDeleteButtonClick(evtObj) {
@@ -199,33 +260,25 @@ function onDeleteButtonClick(evtObj) {
 
 function onChangeButtonClick(evtObj) {
     var buttonChangeMessage = evtObj.target;
+    var index = indexByElement(evtObj.target, messageList);
     var divForMessage = evtObj.target.parentElement;
     if (buttonChangeMessage.innerText == "I") {
-        buttonChangeMessage.innerText = "K";
-        var buttonDontSave = document.createElement('button');
-        buttonDontSave.classList.add('utilDontSave');
-        buttonDontSave.appendChild(document.createTextNode("Don't save"));
         var divForText = divForMessage.lastElementChild;
-        var tempMes = divForText.innerText;
-        globalTempSt = divForText.innerText;
-        var inputForNewMessage = document.createElement('input');
-        inputForNewMessage.classList.add('editname');
-        inputForNewMessage.value = tempMes;
-        divForMessage.removeChild(divForText);
-        divForMessage.appendChild(inputForNewMessage);
-        divForMessage.appendChild(buttonDontSave);
-        buttonDontSave.addEventListener('click', onDontChangeButtonClick);
+        globalCurrentMessage = divForText.innerText;
+        saveCurrentMessageInLocalStorage();
+        messageList[index].changing = true;
+        render(messageList);
+        saveMessages(messageList);
     }
     else {
-        buttonChangeMessage.innerText = "I";
-        var inputForNewMessage = divForMessage.lastElementChild.previousElementSibling;
-        var buttonDontSave = divForMessage.lastElementChild;
-        var tempMes = inputForNewMessage.value;
-        var divForText = document.createElement('div');
-        divForText.innerText = tempMes;
-        divForMessage.removeChild(buttonDontSave);
-        divForMessage.removeChild(inputForNewMessage);
-        divForMessage.appendChild(divForText);
+        var input = divForMessage.lastElementChild.previousElementSibling;
+        if(input.value != loadCurrentMessageFromLocalStorage()) {
+            messageList[index].changed = true;
+        }
+        messageList[index].changing = false;
+        messageList[index].message = input.value;
+        render(messageList);
+        saveMessages(messageList);
     }
 }
 
@@ -276,10 +329,10 @@ function addMessage(value) {
     return newMes;
 }
 
-function indexByElement(element, messages){
+function indexByElement(element, messages) {
     var id = element.parentElement.getAttribute('data-mes-id');
 
-    return messages.findIndex(function(item) {
+    return messages.findIndex(function (item) {
         return item.id == id;
     });
 }

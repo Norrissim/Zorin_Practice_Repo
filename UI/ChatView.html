@@ -23,7 +23,7 @@
     <img class="alarm" src="alarm.png" align="right" alt="Connection problems">
 </section>
 <footer>Z-z-zorin Nikolay Inc-inc-incorporated®, February 2016</footer>
-<div style="display: none" id="message-template" >
+<div style="display: none" id="message-template">
     <div data-mes-id="id">
         <button class="utilDelete">X</button>
         <button class="utilChange">I</button>
@@ -31,11 +31,24 @@
         <div>Author</div>
         <div>Message</div>
     </div>
-    <div style="display: none" id="message-deleted-template">
-        <div data-mes-id="id">
-            DELETED
-        </div>
+</div>
+
+<div style="display: none" id="message-changing-template">
+    <div data-mes-id="id">
+        <button class="utilDelete">X</button>
+        <button class="utilChange">K</button>
+        <div>Time</div>
+        <div>Author</div>
+        <input type="text">
+        <button class="utilDontSave">Don't save</button>
     </div>
 </div>
+
+<div style="display: none" id="message-deleted-template">
+    <div data-mes-id="id">
+        DELETED
+    </div>
+</div>
+
 </body>
 </html>

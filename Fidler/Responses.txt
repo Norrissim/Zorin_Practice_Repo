@@ -1,0 +1,6 @@
+HTTP/1.1 200 OK
+Date: Wed, 30 Mar 2016 08:50:35 GMT
+Access-control-allow-origin: *
+Content-length: 99
+
+{"messages":["Hello","How are you","What are you doing now?","Hello from Fidler"],"token":"TN43EN"}

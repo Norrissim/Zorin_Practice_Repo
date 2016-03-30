@@ -1,0 +1,15 @@
+GET http://192.168.56.1:999/chat?token=TN27EN     HTTP/1.1
+Host: 192.168.56.1:999
+Content-Length: 50
+
+Host: 192.168.56.1:999
+
+User-Agent: Composer
+
+
+HTTP/1.1 200 OK
+Date: Wed, 30 Mar 2016 08:43:25 GMT
+Access-control-allow-origin: *
+Content-length: 57
+
+{"messages":["What are you doing now?"],"token":"TN19EN"}

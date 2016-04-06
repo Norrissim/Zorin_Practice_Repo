@@ -6,8 +6,6 @@
 ##Run
 * Server
 ** run-server-windows.cmd
-* Client
-** run-client-windows.cmd
 
 # Linux
 
@@ -17,5 +15,3 @@
 ##Run
 * Server
 ** run-server-linux.sh
-* Client
-** run-client-linux.sh

@@ -2,8 +2,12 @@ package by.bsu.up.chat.server;
 
 import by.bsu.up.chat.Constants;
 import by.bsu.up.chat.InvalidTokenException;
+import by.bsu.up.chat.common.models.Message;
 import by.bsu.up.chat.logging.Logger;
 import by.bsu.up.chat.logging.impl.Log;
+import by.bsu.up.chat.storage.InMemoryMessageStorage;
+import by.bsu.up.chat.storage.MessageStorage;
+import by.bsu.up.chat.storage.Portion;
 import by.bsu.up.chat.utils.MessageHelper;
 import by.bsu.up.chat.utils.StringUtils;
 import com.sun.net.httpserver.Headers;
@@ -13,7 +17,6 @@ import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +27,7 @@ public class ServerHandler implements HttpHandler {
 
     private static final Logger logger = Log.create(ServerHandler.class);
 
-    private List<String> messageStorage = new ArrayList<>();
+    private MessageStorage messageStorage = new InMemoryMessageStorage();
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
@@ -49,6 +52,12 @@ public class ServerHandler implements HttpHandler {
             return doGet(httpExchange);
         } else if (Constants.REQUEST_METHOD_POST.equals(httpExchange.getRequestMethod())) {
             return doPost(httpExchange);
+        } else if (Constants.REQUEST_METHOD_PUT.equals(httpExchange.getRequestMethod())) {
+            return doPut(httpExchange);
+        } else if (Constants.REQUEST_METHOD_DELETE.equals(httpExchange.getRequestMethod())) {
+            return doDelete(httpExchange);
+        } else if (Constants.REQUEST_METHOD_OPTIONS.equals(httpExchange.getRequestMethod())) {
+            return doOptions(httpExchange);
         } else {
             return new Response(Constants.RESPONSE_CODE_METHOD_NOT_ALLOWED,
                     String.format("Unsupported http method %s", httpExchange.getRequestMethod()));
@@ -71,7 +80,9 @@ public class ServerHandler implements HttpHandler {
                 return Response.badRequest(
                         String.format("Incorrect token in request: %s. Server does not have so many messages", token));
             }
-            String responseBody = MessageHelper.buildServerResponseBody(messageStorage.subList(index, messageStorage.size()));
+            Portion portion = new Portion(index);
+            List<Message> messages = messageStorage.getPortion(portion);
+            String responseBody = MessageHelper.buildServerResponseBody(messages, messageStorage.size());
             return Response.ok(responseBody);
         } catch (InvalidTokenException e) {
             return Response.badRequest(e.getMessage());
@@ -80,9 +91,9 @@ public class ServerHandler implements HttpHandler {
 
     private Response doPost(HttpExchange httpExchange) {
         try {
-            String message = MessageHelper.getClientMessage(httpExchange.getRequestBody());
+            Message message = MessageHelper.getClientMessage(httpExchange.getRequestBody());
             logger.info(String.format("Received new message from user: %s", message));
-            messageStorage.add(message);
+            messageStorage.addMessage(message);
             return Response.ok();
         } catch (ParseException e) {
             logger.error("Could not parse message.", e);
@@ -90,12 +101,39 @@ public class ServerHandler implements HttpHandler {
         }
     }
 
+    private Response doPut(HttpExchange httpExchange) {
+        try {
+            Message message = MessageHelper.getClientMessage(httpExchange.getRequestBody(),false);
+            messageStorage.updateMessage(message);
+            return Response.ok();
+        } catch (ParseException e) {
+            logger.error("Could not parse message.", e);
+            return new Response(Constants.RESPONSE_CODE_BAD_REQUEST, "Incorrect request body");
+        }
+    }
+
+    private Response doDelete(HttpExchange httpExchange) {
+        String query = httpExchange.getRequestURI().getQuery();
+        if (query == null) {
+            return Response.badRequest("Absent query in request");
+        }
+        Map<String, String> map = queryToMap(query);
+        String token = map.get(Constants.REQUEST_PARAM_MESSAGE_ID);
+        messageStorage.removeMessage(token);
+        return Response.ok();
+    }
+
+    private Response doOptions(HttpExchange httpExchange) {
+        httpExchange.getResponseHeaders().add(Constants.REQUEST_HEADER_ACCESS_CONTROL_METHODS,Constants.HEADER_VALUE_ALL_METHODS);
+        return Response.ok();
+    }
+
     private void sendResponse(HttpExchange httpExchange, Response response) {
         try (OutputStream os = httpExchange.getResponseBody()) {
             byte[] bytes = response.getBody().getBytes();
 
             Headers headers = httpExchange.getResponseHeaders();
-            headers.add(Constants.REQUEST_HEADER_ACCESS_CONTROL,"*");
+            headers.add(Constants.REQUEST_HEADER_ACCESS_CONTROL_ORIGIN,"*");
             httpExchange.sendResponseHeaders(response.getStatusCode(), bytes.length);
 
             os.write( bytes);

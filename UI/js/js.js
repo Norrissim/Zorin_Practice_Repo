@@ -39,11 +39,24 @@ function render(messages) {
 }
 
 function initMessageList() {
-    messageList = loadMessages();
+    var url = 'http://localhost:8080/chat?token=TN11EN';
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+            var json = JSON.parse(xhttp.responseText);
+            var text = JSON.stringify(json, null, '\t');
+
+            messageList = json;
+        }
+    };
+
+    xhttp.open("GET", url, true);
+    xhttp.send();
+
     if (messageList == null) {
         messageList = [];
         saveMessages(messageList);
-        messageList = loadMessages();
     }
 }
 

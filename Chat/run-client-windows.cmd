@@ -1,1 +1,0 @@
-"%JAVA_HOME%/bin/java" -cp bin;libs/json-simple-1.1.1.jar by.bsu.up.chat.Launcher --client -l 10.160.66.160 -p 8888

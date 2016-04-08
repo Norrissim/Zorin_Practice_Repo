@@ -12,33 +12,52 @@ public class Message implements Serializable {
     private String author;
     private long timestamp;
     private String text;
-    private String isEdit;
+    private boolean changed;
+    private boolean deleted;
+    private boolean changing;
 
     public Message() {
         this.id = "";
         this.author = "";
         this.timestamp = 0;
         this.text = "";
-        this.isEdit = "";
+        this.changed = false;
+        this.deleted = false;
+        this.changing = false;
     }
 
     public Message(JsonObject temp) {
         this.author = temp.getString("author");
         this.timestamp = temp.getJsonNumber("timestamp").longValue();
         this.text = temp.getString("message");
-        if(temp.size() == 5)
-        this.isEdit = temp.getString("isEdit");
-        else
-        this.isEdit = "";
+        this.deleted = temp.getBoolean("deleted");
+        this.changed = temp.getBoolean("changed");
+        this.changing = temp.getBoolean("changing");
         this.id = temp.getString("id");
     }
 
-    public String getIsEdit() {
-        return isEdit;
+    public boolean isChanging() {
+        return changing;
     }
 
-    public void setIsEdit(String isEdit) {
-        this.isEdit = isEdit;
+    public void setChanging(boolean changing) {
+        this.changing = changing;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public boolean isChanged() {
+        return changed;
+    }
+
+    public void setChanged(boolean changed) {
+        this.changed = changed;
     }
 
     public String getId() {

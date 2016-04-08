@@ -55,7 +55,7 @@ public class InMemoryMessageStorage implements MessageStorage {
         for (Message message : messages) {
             if (message.getId().equals(m.getId())) {
                 message.setText(m.getText());
-                message.setIsEdit("was edited");
+                message.setChanged(true);
 
                 saveMessages(messages);
 
@@ -70,7 +70,7 @@ public class InMemoryMessageStorage implements MessageStorage {
         loadMessages();
         for (int i = 0; i < messages.size(); i++) {
             if (messages.get(i).getId().equals(messageId)) {
-                messages.remove(i);
+                messages.get(i).setDeleted(true);
                 saveMessages(messages);
                 return true;
             }
@@ -96,7 +96,7 @@ public class InMemoryMessageStorage implements MessageStorage {
 
     public static JsonArray getJsonArrayFromFile() {
         try {
-            List<String> list = Files.readAllLines(Paths.get("D:\\Study\\Programming\\My files\\Practice\\MessageHistory.json"));
+            List<String> list = Files.readAllLines(Paths.get("D:\\Study\\Programming\\My files\\Practice\\My Server\\MessageHistory.json"));
             String JSONData = list.toString();
             JsonReader forRead = Json.createReader(new StringReader(JSONData));
             JsonArray forArray = forRead.readArray();
@@ -120,8 +120,8 @@ public class InMemoryMessageStorage implements MessageStorage {
                 }
                 JsonArray arr = jsonHistory.build();
                 writeHistory.writeArray(arr);
-                fileOutput.close();
                 writeHistory.close();
+                fileOutput.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -134,8 +134,10 @@ public class InMemoryMessageStorage implements MessageStorage {
                 .add("author", aHistory.getAuthor())
                 .add("timestamp", aHistory.getTimestamp())
                 .add("message", aHistory.getText())
-                .add("isEdit", aHistory.getIsEdit()).build();
-
+                .add("changed", aHistory.isChanged())
+                .add("deleted", aHistory.isDeleted())
+                .add("changing", aHistory.isChanging())
+                .build();
     }
 
     @Override

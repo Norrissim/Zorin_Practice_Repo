@@ -16,6 +16,7 @@ import by.bsu.up.chat.utils.StringUtils;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -116,13 +117,18 @@ public class ServerHandler implements HttpHandler {
     }
 
     private Response doDelete(HttpExchange httpExchange) {
-        String query = httpExchange.getRequestURI().getQuery();
-        if (query == null) {
+        String body = MessageHelper.inputStreamToString(httpExchange.getRequestBody());
+        if (body == null) {
             return Response.badRequest("Absent query in request");
         }
-        Map<String, String> map = queryToMap(query);
-        String token = map.get(Constants.REQUEST_PARAM_MESSAGE_ID);
-        messageStorage.removeMessage(token);
+        try {
+            JSONObject jsonObj = MessageHelper.stringToJsonObject(body);
+            String id = jsonObj.get("id").toString();
+            messageStorage.removeMessage(jsonObj.get("id").toString());
+            jsonObj = null;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return Response.ok();
     }
 

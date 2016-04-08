@@ -17,7 +17,7 @@ public class Launcher {
 
     private static final Log logger = Log.create(Launcher.class);
 
-    public static final int DEFAULT_SERVER_PORT = 8080;
+    public static final int DEFAULT_SERVER_PORT = 9191;
 
     public static final String HELP_COMMAND = "--help";
     public static final String SHORT_HELP_COMMAND = "-h";

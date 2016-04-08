@@ -37,5 +37,9 @@ public interface Constants {
         String FIELD_AUTHOR = "author";
         String FIELD_TIMESTAMP = "time";
         String FIELD_TEXT = "message";
+        String FIELD_DELETED = "deleted";
+        String FIELD_CHANGED = "changed";
+        String FIELD_CHANGING = "changing";
+
     }
 }

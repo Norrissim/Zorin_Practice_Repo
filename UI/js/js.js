@@ -206,21 +206,6 @@ function saveMessage(newMessage) {
     });
 }
 
-function loadMessages() {
-    if (typeof(Storage) == "undefined") {
-        alert('localStorage is not accessible');
-        return;
-    }
-
-    var item = localStorage.getItem("MessagesList");
-
-    if (item == 'undefined') {
-        return null;
-    }
-
-    return item && JSON.parse(item);
-}
-
 function uniqueId() {
     var date = Date.now();
     var random = Math.random() * Math.random();
@@ -288,18 +273,23 @@ function onChangeButtonClick(evtObj) {
         saveCurrentMessageInLocalStorage();
         Application.messageList[index].changing = true;
         render(Application.messageList);
-        saveMessages(Application.messageList);
     }
     else {
         var input = divForMessage.lastElementChild.previousElementSibling;
+        var m = Application.messageList[index]
         if(input.value != loadCurrentMessageFromLocalStorage()) {
-            Application.messageList[index].changed = true;
+            m.changed = true;
         }
-        Application.messageList[index].changing = false;
-        Application.messageList[index].message = input.value;
-        render(Application.messageList);
-        saveMessages(Application.messageList);
+        m.changing = false;
+        m.message = input.value;
+        sendPutRequestToServer(m);
     }
+}
+
+function sendPutRequestToServer(m) {
+    ajax('PUT', Application.mainUrl, JSON.stringify(m), function(){
+        render(Application.messageList);
+    });
 }
 
 
@@ -312,7 +302,12 @@ function onUsernameChange() {
         changeButton.innerText = "Save";
     }
     else {
-
+        Application.messageList.forEach(function(nextMes) {
+            if(nextMes.changing == true) {
+                nextMes.changing = false;
+                sendPutRequestToServer(nextMes);
+            }
+        })
         changeButton.innerText = "Ch-ch-change";
         globalCurrentUsername = editChangeName.value;
         editChangeName.disabled = true;

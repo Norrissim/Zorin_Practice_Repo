@@ -374,18 +374,11 @@ function ajax(method, url, data, continueWith, continueWithError) {
     };
 
     xhr.ontimeout = function () {
-        continueWithError('Server timed out !');
+        ServerError();
     }
 
     xhr.onerror = function (e) {
-        var errMsg = 'Server connection error !\n'+
-            '\n' +
-            'Check if \n'+
-            '- server is active\n'+
-            '- server sends header "Access-Control-Allow-Origin:*"\n'+
-            '- server sends header "Access-Control-Allow-Methods: PUT, DELETE, POST, GET, OPTIONS"\n';
-
-        continueWithError(errMsg);
+        ServerError();
     };
 
     xhr.send(data);
@@ -407,4 +400,9 @@ function isError(text) {
     }
 
     return !!obj.error;
+}
+
+function ServerError(){
+    var errorServer = document.getElementsByClassName('ServerError')[0];
+    errorServer.innerHTML = '<img class="alarm" align="right" src="alarm.png" alt="Connection problems">';
 }

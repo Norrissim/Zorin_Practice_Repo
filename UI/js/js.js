@@ -6,7 +6,8 @@ var globalCurrentUsername;
 var Application = {
     mainUrl : 'http://localhost:9191/chat',
     messageList : [],
-    token : 'TN11EN'
+    token : 'TN11EN',
+    isConnected : null
 };
 
 function run() {
@@ -371,6 +372,7 @@ function ajax(method, url, data, continueWith, continueWithError) {
         }
 
         continueWith(xhr.responseText);
+        Application.isConnected = true;
     };
 
     xhr.ontimeout = function () {
@@ -405,4 +407,24 @@ function isError(text) {
 function ServerError(){
     var errorServer = document.getElementsByClassName('ServerError')[0];
     errorServer.innerHTML = '<img class="alarm" align="right" src="alarm.png" alt="Connection problems">';
+}
+
+function Connect() {
+    if(Application.isConnected)
+        return;
+
+    function whileConnected() {
+        Application.isConnected = setTimeout(function () {
+            ajax('GET', Application.mainUrl + '?token=' + Application.token, null,function (serverResponse) {
+                if (Application.isConnected) {
+                    var json = JSON.parse(serverResponse);
+                    Application.messageList = json.messages;
+                    render(Application.messageList);
+                    whileConnected();
+                }
+            });
+        }, Math.round(1000));
+    }
+
+    whileConnected();
 }

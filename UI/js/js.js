@@ -51,6 +51,8 @@ function getMessageHistory() {
         var json = JSON.parse(responseText);
         Application.messageList = json.messages;
         render(Application.messageList);
+        Connect();
+        centerPart.scrollTop = centerPart.scrollHeight;
     });
 }
 
@@ -59,7 +61,6 @@ function initMessageList() {
 
     if (Application.messageList == null) {
         Application.messageList = [];
-        saveMessages(Application.messageList);
     }
 }
 
@@ -216,7 +217,6 @@ function uniqueId() {
 
 function newMessage(text, author) {
     var d = new Date();
-    var t = d.getTime();
     d = d.getTime();
     return {
         message: text,
@@ -277,7 +277,7 @@ function onChangeButtonClick(evtObj) {
     }
     else {
         var input = divForMessage.lastElementChild.previousElementSibling;
-        var m = Application.messageList[index]
+        var m = Application.messageList[index];
         if(input.value != loadCurrentMessageFromLocalStorage()) {
             m.changed = true;
         }
@@ -327,7 +327,7 @@ function onMessageEnter() {
     var newMessage = document.getElementById('messageArea');
     var centerPart = document.getElementsByClassName('centralPart')[0];
 
-    var mes = addMessage(newMessage.value);
+    addMessage(newMessage.value);
     newMessage.value = '';
     centerPart.scrollTop = centerPart.scrollHeight;
 }

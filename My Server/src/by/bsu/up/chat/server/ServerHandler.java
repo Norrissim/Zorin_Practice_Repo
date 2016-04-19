@@ -98,7 +98,8 @@ public class ServerHandler implements HttpHandler {
             Message message = MessageHelper.getClientMessage(httpExchange.getRequestBody());
             logger.info(String.format("Received new message from user: %s", message));
             messageStorage.addMessage(message);
-            return Response.ok();
+            String responseBody = MessageHelper.buildServerResponseBody(null, messageStorage.size());
+            return Response.ok(responseBody);
         } catch (ParseException e) {
             logger.error("Could not parse message.", e);
             return new Response(Constants.RESPONSE_CODE_BAD_REQUEST, "Incorrect request body");

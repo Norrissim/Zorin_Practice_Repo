@@ -81,7 +81,13 @@ public class MessageHelper {
 
     @SuppressWarnings("unchecked")      //allows to suppress warning of unchecked parameter type for generics
     public static String buildServerResponseBody(List<Message> messages, int lastPosition) {
-        JSONArray array = getJsonArrayOfMessages(messages);
+        JSONArray array;
+        if(messages != null) {
+            array = getJsonArrayOfMessages(messages);
+        }
+        else {
+            array = new JSONArray();
+        }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(MESSAGE_PART_ALL_MSG, array);
         jsonObject.put(MESSAGE_PART_TOKEN, buildToken(lastPosition));

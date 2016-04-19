@@ -49,9 +49,11 @@ function getMessageHistory() {
 
     ajax('GET', url, null, function(responseText){
         var json = JSON.parse(responseText);
-        Application.messageList = json.messages;
+        Application.messageList = Application.messageList.concat(json.messages);
+        Application.token = json.token;
         render(Application.messageList);
         Connect();
+        var centerPart = document.getElementsByClassName('centralPart')[0];
         centerPart.scrollTop = centerPart.scrollHeight;
     });
 }
@@ -203,7 +205,9 @@ function loadCurrentMessageFromLocalStorage() {
 }
 
 function saveMessage(newMessage) {
-    ajax('POST', Application.mainUrl, JSON.stringify(newMessage), function(){
+    ajax('POST', Application.mainUrl, JSON.stringify(newMessage), function(responseText){
+        var json = JSON.parse(responseText);
+        Application.token = json.token;
         render(Application.messageList);
     });
 }
@@ -418,8 +422,11 @@ function Connect() {
             ajax('GET', Application.mainUrl + '?token=' + Application.token, null,function (serverResponse) {
                 if (Application.isConnected) {
                     var json = JSON.parse(serverResponse);
-                    Application.messageList = json.messages;
+                    Application.messageList = Application.messageList.concat(json.messages);
+                    Application.token = json.token;
                     render(Application.messageList);
+                    var centerPart = document.getElementsByClassName('centralPart')[0];
+                    centerPart.scrollTop = centerPart.scrollHeight;
                     whileConnected();
                 }
             });

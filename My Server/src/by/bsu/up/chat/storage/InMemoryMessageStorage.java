@@ -96,7 +96,7 @@ public class InMemoryMessageStorage implements MessageStorage {
 
     public static JsonArray getJsonArrayFromFile() {
         try {
-            List<String> list = Files.readAllLines(Paths.get("D:\\Study\\Programming\\My files\\Practice\\My Server\\MessageHistory.json"));
+            List<String> list = Files.readAllLines(Paths.get("MessageHistory.json"));
             String JSONData = list.toString();
             JsonReader forRead = Json.createReader(new StringReader(JSONData));
             JsonArray forArray = forRead.readArray();

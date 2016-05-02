@@ -176,7 +176,7 @@ function saveUsernameInLocalStorage() {
 function loadUsernameFromLocalStorage() {
     if (typeof(Storage) == "undefined") {
         alert('localStorage is not accessible');
-        return;
+        return ;
     }
 
     var item = localStorage.getItem("CurrentUsername");
@@ -337,10 +337,10 @@ function onMessageEnter() {
 }
 
 function addMessage(value) {
-    if (!value || !loadUsernameFromLocalStorage()) {
+    if (!value || !globalCurrentUsername) {
         return;
     }
-    var newMes = newMessage(value, loadUsernameFromLocalStorage());
+    var newMes = newMessage(value, globalCurrentUsername);
 
     Application.messageList.push(newMes);
     saveMessage(newMes);

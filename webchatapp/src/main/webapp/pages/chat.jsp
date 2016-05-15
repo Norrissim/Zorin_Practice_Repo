@@ -1,3 +1,4 @@
+<%@ page  contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -12,8 +13,8 @@
         B-b-bumble Chat
     </header>
     <div class="username">Us-us-username :</div>
-    <input disabled class="editname" type="text" placeholder="In-in-input your us-us-username">
-    <button class="changeUsername" id="changeUsername" type="button">Ch-ch-change</button>
+    <input disabled class="editname" type="text" value="${pageContext.request.getParameter('username')}">
+    <button class="changeUsername" id="changeUsername" type="button">Logout</button>
 </section>
 <section class="centralPart">
 </section>

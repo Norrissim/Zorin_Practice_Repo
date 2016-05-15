@@ -4,7 +4,8 @@ var globalCurrentMessage;
 var globalCurrentUsername;
 
 var Application = {
-    mainUrl : 'http://localhost:9191/chat',
+    mainUrl : 'http://localhost:8080/chat',
+    secondUrl : 'http://localhost:8080/login',
     messageList : [],
     token : 'TN11EN',
     isConnected : null
@@ -14,18 +15,22 @@ function run() {
     var usernameButton = document.getElementsByClassName('changeUsername')[0];
     var messageButton = document.getElementsByClassName('enterMessage')[0];
 
-    usernameButton.addEventListener('click', onUsernameChange);
     messageButton.addEventListener('click', onMessageEnter);
+    usernameButton.addEventListener('click', onUsernameChange);
 
     var centerPart = document.getElementsByClassName('centralPart')[0];
     centerPart.addEventListener('click', onMassageClick);
 
     initMessageList();
 
-    globalCurrentUsername = loadUsernameFromLocalStorage();
     initUsername();
 
     centerPart.scrollTop = centerPart.scrollHeight;
+}
+
+function onUsernameChange() {
+    var url = Application.mainUrl + "/exit";
+    ajax('GET', url, null);
 }
 
 function render(messages) {
@@ -47,15 +52,15 @@ function render(messages) {
 function getMessageHistory() {
     var url = Application.mainUrl + '?token=' + Application.token;
 
-    ajax('GET', url, null, function(responseText){
-        var json = JSON.parse(responseText);
-        Application.messageList = Application.messageList.concat(json.messages);
-        Application.token = json.token;
-        render(Application.messageList);
-        Connect();
-        var centerPart = document.getElementsByClassName('centralPart')[0];
-        centerPart.scrollTop = centerPart.scrollHeight;
-    });
+        ajax('GET', url, null, function(responseText){
+            var json = JSON.parse(responseText);
+            Application.messageList = Application.messageList.concat(json.messages);
+            Application.token = json.token;
+            render(Application.messageList);
+            Connect();
+            var centerPart = document.getElementsByClassName('centralPart')[0];
+            centerPart.scrollTop = centerPart.scrollHeight;
+        });
 }
 
 function initMessageList() {
@@ -297,34 +302,18 @@ function sendPutRequestToServer(m) {
     });
 }
 
-
-function onUsernameChange() {
-    var centerPart = document.getElementsByClassName('centralPart')[0];
-    var changeButton = document.getElementById("changeUsername");
-    var editChangeName = document.getElementsByClassName("editname")[0];
-    if (changeButton.innerText == "Ch-ch-change") {
-        editChangeName.disabled = false;
-        changeButton.innerText = "Save";
-    }
-    else {
-        Application.messageList.forEach(function(nextMes) {
-            if(nextMes.changing == true) {
-                nextMes.changing = false;
-                sendPutRequestToServer(nextMes);
-            }
-        })
-        changeButton.innerText = "Ch-ch-change";
-        globalCurrentUsername = editChangeName.value;
-        editChangeName.disabled = true;
-        centerPart.scrollTop = centerPart.scrollHeight;
-        saveUsernameInLocalStorage();
-        render(Application.messageList);
-    }
-}
-
 function initUsername() {
     var editChangeName = document.getElementsByClassName("editname")[0];
-    editChangeName.value = globalCurrentUsername;
+    globalCurrentUsername = editChangeName.value;
+    if(globalCurrentUsername == '') {
+        var uid = getCookie('uid');
+        ajax('PUT', Application.mainUrl + "/getUsername", JSON.stringify(uid), function(responseText){
+            var json = responseText;
+            globalCurrentUsername =  json;
+            editChangeName.value = json;
+        });
+
+    }
 }
 
 function onMessageEnter() {
@@ -392,7 +381,6 @@ function ajax(method, url, data, continueWith, continueWithError) {
 
 function defaultErrorHandler(message) {
     console.error(message);
-    output(message);
 }
 
 function isError(text) {
@@ -434,4 +422,15 @@ function Connect() {
     }
 
     whileConnected();
+}
+
+function getCookie(name) {
+    var matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^]")/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+function setCookie (name, value) {
+    document.cookie = name + "=" + escape(value);
 }

@@ -19,7 +19,7 @@ public class UserBank {
     private List<User> users = new ArrayList<User>();
 
     public UserBank() {
-        System.out.println("created");
+
     }
 
     public void loadUsers() {

@@ -1,0 +1,51 @@
+package filters;
+
+import Servlets.LoginServlet;
+import utils.StaticKeyStorage;
+
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+/**
+ * Created by User on 12/05/2016.
+ */
+
+@WebFilter(value = "/chatServ")
+public class AuthenticationFilter implements Filter {
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        String uidParam = servletRequest.getParameter(LoginServlet.COOKIE_USER_ID);
+        if (uidParam == null && servletRequest instanceof HttpServletRequest) {
+            Cookie[] cookies = ((HttpServletRequest) servletRequest).getCookies();
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(LoginServlet.COOKIE_USER_ID)) {
+                    uidParam = cookie.getValue();
+                }
+            }
+        }
+        boolean authenticated = uidParam != null && !uidParam.equals("") && checkAuthenticated(uidParam);
+        if (authenticated) {
+            filterChain.doFilter(servletRequest, servletResponse);
+        } else {
+            servletResponse.getOutputStream().println("403, Forbidden");
+        }
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+
+    private boolean checkAuthenticated(String uid) {
+        return StaticKeyStorage.getUserByUid(uid) != null;
+    }
+}

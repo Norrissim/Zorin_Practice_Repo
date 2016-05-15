@@ -1,15 +1,19 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page  contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <html>
 <head>
     <title>Title</title>
 </head>
 <body>
 
-<form action="/login" method="post">
-    <label>Username</label>
-    <input name="username">
-    <label>Password</label>
-    <input type="password" name="password">
+<form action="${pageContext.request.contextPath}/login" method="post">
+    <label>
+        Username:
+        <input name="username">
+    </label>
+    <label>
+        Password:
+        <input type="password" name="password">
+    </label>
     <input type="submit" value="Submit">
 
 </form>

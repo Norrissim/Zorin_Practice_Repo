@@ -25,6 +25,8 @@ public class UtilServlet extends HttpServlet {
         String uid = br.readLine();
         uid = uid.substring(1, uid.length()-1);
         String username = StaticKeyStorage.getUserByUid(uid);
-        resp.setHeader("username", username);
+        PrintWriter pw = resp.getWriter();
+        pw.write(username);
+        pw.close();
     }
 }

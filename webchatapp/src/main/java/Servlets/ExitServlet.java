@@ -20,8 +20,13 @@ public class ExitServlet extends HttpServlet {
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals(LoginServlet.COOKIE_USER_ID)) {
                 cookie.setValue("");
+                cookie.setMaxAge(0);
+                resp.addCookie(cookie);
             }
         }
+
+        req.getSession().invalidate();
+
         getServletContext().getRequestDispatcher("/loginServ").forward(req, resp);
     }
 }

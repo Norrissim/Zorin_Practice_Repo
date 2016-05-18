@@ -1,0 +1,1 @@
+select name from users as u where ((select count(user_id) from messages where user_id = u.user_id) > 3);

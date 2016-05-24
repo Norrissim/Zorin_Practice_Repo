@@ -1,0 +1,1 @@
+﻿Users.json и MessageHistory.json необходимо закинуть в bin папку томката

@@ -406,6 +406,8 @@ function Connect() {
         return;
 
     function whileConnected() {
+        var errorServer = document.getElementsByClassName('ServerError')[0];
+        errorServer.classList.remove("ServerError");
         Application.isConnected = setTimeout(function () {
             ajax('GET', Application.mainUrl + '?token=' + Application.token, null,function (serverResponse) {
                 if (Application.isConnected) {

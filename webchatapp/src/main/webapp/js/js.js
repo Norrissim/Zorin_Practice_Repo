@@ -16,7 +16,7 @@ function run() {
     var messageButton = document.getElementsByClassName('enterMessage')[0];
 
     messageButton.addEventListener('click', onMessageEnter);
-    usernameButton.addEventListener('click', onUsernameChange);
+   // usernameButton.addEventListener('click', onUsernameChange);
 
     var centerPart = document.getElementsByClassName('centralPart')[0];
     centerPart.addEventListener('click', onMassageClick);
@@ -390,7 +390,7 @@ function isError(text) {
     try {
         var obj = JSON.parse(text);
     } catch(ex) {
-        return true;
+        return text.error;
     }
 
     return !!obj.error;
@@ -406,8 +406,6 @@ function Connect() {
         return;
 
     function whileConnected() {
-        var errorServer = document.getElementsByClassName('ServerError')[0];
-        errorServer.classList.remove("ServerError");
         Application.isConnected = setTimeout(function () {
             ajax('GET', Application.mainUrl + '?token=' + Application.token, null,function (serverResponse) {
                 if (Application.isConnected) {

@@ -14,7 +14,9 @@
     </header>
     <div class="username">Us-us-username :</div>
     <input disabled class="editname" type="text" value="${pageContext.request.getParameter('username')}">
-    <button class="changeUsername" id="changeUsername" type="button">Logout</button>
+    <form action="${pageContext.request.contextPath}/chat/exit" method="get">
+        <input class="changeUsername" id="changeUsername" type="submit" value="Logout">
+    </form>
 </section>
 <section class="centralPart">
 </section>
